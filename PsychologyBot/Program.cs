@@ -1,11 +1,10 @@
-﻿namespace PsychologyBot
+﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
+
+namespace PsychologyBot
 {
-    using Microsoft.AspNetCore;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Logging;
-
-    using Serilog;
-
     public class Program
     {
         public static void Main(string[] args)
@@ -16,10 +15,7 @@
         public static IWebHost BuildWebHost(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
-                .ConfigureLogging((hostingContext, logging) =>
-                {
-                    logging.AddAzureWebAppDiagnostics();
-                })
+                .ConfigureLogging((hostingContext, logging) => { logging.AddAzureWebAppDiagnostics(); })
                 .UseSerilog(
                     (hostingContext, loggerConfiguration) =>
                         loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration))

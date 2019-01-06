@@ -2,12 +2,12 @@
 @{
 }
 <div class="container">
-    @if (this.Model.AllUsers.Count > 0)
+    @if (Model.AllUsers.Count > 0)
     {
         <div class="row">
             <div class="col">
                 <div class="list-group">
-                    @foreach (User user in this.Model.AllUsers)
+                    @foreach (User user in Model.AllUsers)
                     {
                         <a asp-route-id="@user.Id" asp-action="User" asp-controller="Home" class="list-group-item list-group-item-action">
                             @user.Name

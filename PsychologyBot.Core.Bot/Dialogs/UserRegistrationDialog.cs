@@ -1,21 +1,18 @@
-﻿using PsychologyBot.Core.Bot.Accessors;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Bogus;
+using Bogus.DataSets;
+using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Choices;
+using PsychologyBot.Core.Bot.Accessors;
 using PsychologyBot.Core.Bot.States;
 using PsychologyBot.Core.Interfaces;
 using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.Bot.Dialogs
 {
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    using Bogus;
-    using Bogus.DataSets;
-
-    using Microsoft.Bot.Builder;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.Dialogs.Choices;
-
     public class UserRegistrationDialog : ComponentDialog
     {
         public const string DialogId = nameof(UserRegistrationDialog);
@@ -25,73 +22,80 @@ namespace PsychologyBot.Bot.Dialogs
         private const string ConfirmPromptId = "ConfirmPromptId";
 
         private readonly ConversationStateAccessors conversationStateAccessors;
-        private readonly IUserBotRepository userRepository;
 
         private readonly Faker userFaker;
+        private readonly IUserBotRepository userRepository;
 
         public UserRegistrationDialog(
             ConversationStateAccessors conversationStateAccessors,
             IUserBotRepository userRepository)
-            : base(UserRegistrationDialog.DialogId)
+            : base(DialogId)
         {
             this.conversationStateAccessors = conversationStateAccessors;
             this.userRepository = userRepository;
 
-            this.userFaker = new Faker();
+            userFaker = new Faker();
 
             WaterfallStep[] steps =
             {
-                this.AskGender,
-                this.ApplyGender,
-                this.SuggestName,
-                this.AskAboutFamily,
-                this.AskAboutConversationTroubles,
-                this.Register,
+                AskGender,
+                ApplyGender,
+                SuggestName,
+                AskAboutFamily,
+                AskAboutConversationTroubles,
+                Register
             };
 
-            this.AddDialog(new WaterfallDialog(WaterfallDialogId, steps));
+            AddDialog(new WaterfallDialog(WaterfallDialogId, steps));
 
-            this.AddDialog(new ChoicePrompt(ChoicePromptId));
+            AddDialog(new ChoicePrompt(ChoicePromptId));
 
-            this.AddDialog(new ConfirmPrompt(ConfirmPromptId));
+            AddDialog(new ConfirmPrompt(ConfirmPromptId));
         }
 
-        private async Task<DialogTurnResult> AskGender(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> AskGender(WaterfallStepContext stepContext,
+            CancellationToken cancellationToken)
         {
             return await stepContext.PromptAsync(
                 ChoicePromptId,
-                new PromptOptions()
+                new PromptOptions
                 {
                     Prompt = MessageFactory.Text("Пожалуйста, укажите ваш пол"),
                     RetryPrompt = MessageFactory.Text("Извините, не могу распознать Ваш ответ"),
-                    Choices = ChoiceFactory.ToChoices(new List<string> {"Мужчина", "Женщина"}),
+                    Choices = ChoiceFactory.ToChoices(new List<string> {"Мужчина", "Женщина"})
                 },
                 cancellationToken);
         }
 
-        private async Task<DialogTurnResult> ApplyGender(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> ApplyGender(WaterfallStepContext stepContext,
+            CancellationToken cancellationToken)
         {
-            RegistrationState registrationState = await this.conversationStateAccessors
+            RegistrationState registrationState = await conversationStateAccessors
                 .RegistrationStateAccessor
                 .GetAsync(
                     stepContext.Context,
                     () => new RegistrationState(),
                     cancellationToken);
-            registrationState.Gender = ((FoundChoice)stepContext.Result).Value == "Мужчина" ? Gender.Male : Gender.Female;
+            registrationState.Gender =
+                ((FoundChoice) stepContext.Result).Value == "Мужчина" ? Gender.Male : Gender.Female;
 
             return await stepContext.NextAsync(cancellationToken: cancellationToken);
         }
 
-        private async Task<DialogTurnResult> SuggestName(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> SuggestName(WaterfallStepContext stepContext,
+            CancellationToken cancellationToken)
         {
-            RegistrationState registrationState = await this.conversationStateAccessors
+            RegistrationState registrationState = await conversationStateAccessors
                 .RegistrationStateAccessor
                 .GetAsync(
                     stepContext.Context,
                     () => new RegistrationState(),
                     cancellationToken);
 
-            registrationState.Name = this.userFaker.Name.FullName(registrationState.Gender == Gender.Male ? Name.Gender.Male : Name.Gender.Female);
+            registrationState.Name =
+                userFaker.Name.FullName(registrationState.Gender == Gender.Male
+                    ? Name.Gender.Male
+                    : Name.Gender.Female);
 
             await stepContext.Context.SendActivityAsync(
                 $"Для общения с психологом Вам присвоен псевдоним: {registrationState.Name}",
@@ -100,56 +104,60 @@ namespace PsychologyBot.Bot.Dialogs
             return await stepContext.NextAsync(cancellationToken: cancellationToken);
         }
 
-        private async Task<DialogTurnResult> AskAboutFamily(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> AskAboutFamily(WaterfallStepContext stepContext,
+            CancellationToken cancellationToken)
         {
             return await stepContext.PromptAsync(
                 ConfirmPromptId,
-                new PromptOptions()
+                new PromptOptions
                 {
-                    Prompt = MessageFactory.Text("У вас есть семья?"),
+                    Prompt = MessageFactory.Text("У вас есть семья?")
                 },
                 cancellationToken);
         }
 
-        private async Task<DialogTurnResult> AskAboutConversationTroubles(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> AskAboutConversationTroubles(WaterfallStepContext stepContext,
+            CancellationToken cancellationToken)
         {
-            RegistrationState registrationState = await this.conversationStateAccessors
+            RegistrationState registrationState = await conversationStateAccessors
                 .RegistrationStateAccessor
                 .GetAsync(
                     stepContext.Context,
                     () => new RegistrationState(),
                     cancellationToken);
 
-            registrationState.HasFamily = (bool)stepContext.Result;
+            registrationState.HasFamily = (bool) stepContext.Result;
 
             return await stepContext.PromptAsync(
                 ConfirmPromptId,
-                new PromptOptions()
+                new PromptOptions
                 {
-                    Prompt = MessageFactory.Text("У вас есть проблемы в общении?"),
+                    Prompt = MessageFactory.Text("У вас есть проблемы в общении?")
                 },
                 cancellationToken);
         }
 
-        private async Task<DialogTurnResult> Register(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> Register(WaterfallStepContext stepContext,
+            CancellationToken cancellationToken)
         {
-            RegistrationState registrationState = await this.conversationStateAccessors
+            RegistrationState registrationState = await conversationStateAccessors
                 .RegistrationStateAccessor
                 .GetAsync(
                     stepContext.Context,
                     () => new RegistrationState(),
                     cancellationToken);
 
-            registrationState.HasConversationTroubles = (bool)stepContext.Result;
+            registrationState.HasConversationTroubles = (bool) stepContext.Result;
 
-            User user = new User(stepContext.Context.Activity.From.Id, stepContext.Context.Activity.GetConversationReference())
+            User user = new User(stepContext.Context.Activity.From.Id,
+                stepContext.Context.Activity.GetConversationReference())
             {
                 Name = registrationState.Name,
                 Gender = registrationState.Gender,
                 HasFamily = registrationState.HasFamily,
-                HasConversationTroubles = registrationState.HasConversationTroubles,
+                HasConversationTroubles = registrationState.HasConversationTroubles
             };
-            this.userRepository.AddUser(user);
+            userRepository.AddUser(user);
 
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }

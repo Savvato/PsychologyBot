@@ -1,20 +1,21 @@
-﻿namespace PsychologyBot.Controllers
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.BotFramework;
+using Microsoft.Bot.Builder.Integration;
+using PsychologyBot.Core.Bot.States;
+using PsychologyBot.Core.Interfaces;
+using PsychologyBot.Core.Models;
+using PsychologyBot.ViewModels;
+
+namespace PsychologyBot.Controllers
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Bot.Builder;
-    using Microsoft.Bot.Builder.BotFramework;
-    using Microsoft.Bot.Builder.Integration;
-
-    using PsychologyBot.ViewModels;
-
     public class HomeController : Controller
     {
-        private readonly IUserRepository userRepository;
-        private readonly ConfigurationCredentialProvider credentialProvider;
         private readonly BotFrameworkAdapter adapter;
+        private readonly ConfigurationCredentialProvider credentialProvider;
+        private readonly IUserRepository userRepository;
 
         public HomeController(
             IUserRepository userRepository,
@@ -29,32 +30,32 @@
         [HttpGet]
         public IActionResult Index()
         {
-            return this.View(new UserViewModel()
+            return View(new UserViewModel
             {
-                AllUsers = this.userRepository.GetAllUsers(),
+                AllUsers = userRepository.GetAllUsers()
             });
         }
 
         [HttpGet]
         public IActionResult User(string id)
         {
-            return this.View(new UserViewModel()
+            return View(new UserViewModel
             {
-                AllUsers = this.userRepository.GetAllUsers(),
-                SelectedUser = this.userRepository.GetUserById(id),
+                AllUsers = userRepository.GetAllUsers(),
+                SelectedUser = userRepository.GetUserById(id)
             });
         }
 
         [HttpPost]
         public async Task<IActionResult> Send(string id, MessageState messageState)
         {
-            User user = this.userRepository.GetUserById(id);
+            User user = userRepository.GetUserById(id);
 
             Message message = new Message(messageState.MessageString, false);
 
             user.Messages.Add(message);
 
-            await this.adapter.ContinueConversationAsync(
+            await adapter.ContinueConversationAsync(
                 credentialProvider.AppId,
                 user.ConversationReference,
                 async (turnContext, cancellationToken) => await turnContext.SendActivityAsync(
@@ -62,7 +63,7 @@
                     cancellationToken: cancellationToken),
                 default(CancellationToken));
 
-            return this.RedirectToAction("User", new { id = id });
+            return RedirectToAction("User", new {id});
         }
     }
 }

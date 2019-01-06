@@ -8,36 +8,36 @@ namespace PsychologyBot.Infrastructure.Repositories
 {
     public class UserRepository : IUserBotRepository, IUserRepository
     {
-        private List<User> users;
+        private readonly List<User> users;
 
         public UserRepository()
         {
-            this.users = new List<User>();
+            users = new List<User>();
         }
 
         public User GetCurrentUser(ITurnContext turnContext)
         {
-            return this.users.FirstOrDefault(user => user.Id == turnContext.Activity.From.Id);
-        }
-
-        public List<User> GetAllUsers()
-        {
-            return this.users;
-        }
-
-        public User GetUserById(string id)
-        {
-            return this.users.FirstOrDefault(user => user.Id == id);
+            return users.FirstOrDefault(user => user.Id == turnContext.Activity.From.Id);
         }
 
         public bool IsUserExists(ITurnContext turnContext)
         {
-            return this.users.Exists(user => user.Id == turnContext.Activity.From.Id);
+            return users.Exists(user => user.Id == turnContext.Activity.From.Id);
         }
 
         public void AddUser(User user)
         {
-            this.users.Add(user);
+            users.Add(user);
+        }
+
+        public List<User> GetAllUsers()
+        {
+            return users;
+        }
+
+        public User GetUserById(string id)
+        {
+            return users.FirstOrDefault(user => user.Id == id);
         }
     }
 }

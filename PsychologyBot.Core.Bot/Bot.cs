@@ -15,11 +15,11 @@ namespace PsychologyBot.Core.Bot
 {
     public class Bot : IBot
     {
-        private readonly IUserBotRepository userRepository;
         private readonly ConversationStateAccessors conversationStateAccessors;
-        private readonly ILogger<Bot> logger;
 
         private readonly DialogSet dialogs;
+        private readonly ILogger<Bot> logger;
+        private readonly IUserBotRepository userRepository;
 
         public Bot(
             IUserBotRepository userRepository,
@@ -32,45 +32,45 @@ namespace PsychologyBot.Core.Bot
             this.conversationStateAccessors = conversationStateAccessors;
             this.logger = logger;
 
-            this.dialogs = new DialogSet(this.conversationStateAccessors.DialogStateAccessor);
-            this.dialogs.Add(userRegistrationDialog);
-            this.dialogs.Add(messageDialog);
+            dialogs = new DialogSet(this.conversationStateAccessors.DialogStateAccessor);
+            dialogs.Add(userRegistrationDialog);
+            dialogs.Add(messageDialog);
         }
 
-        public async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task OnTurnAsync(ITurnContext turnContext,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            DialogContext dialogContext = await this.dialogs.CreateContextAsync(turnContext, cancellationToken);
+            DialogContext dialogContext = await dialogs.CreateContextAsync(turnContext, cancellationToken);
 
             switch (turnContext.Activity.Type)
             {
                 case ActivityTypes.Message:
-                    await this.HandleMessage(turnContext, dialogContext, cancellationToken);
+                    await HandleMessage(turnContext, dialogContext, cancellationToken);
                     break;
                 case ActivityTypes.ConversationUpdate:
                     string botId = turnContext.Activity.Recipient.Id;
                     bool isBotAdded = turnContext.Activity.MembersAdded.ToList().Exists(member => member.Id == botId);
 
-                    if (isBotAdded)
-                    {
-                        return;
-                    }
+                    if (isBotAdded) return;
 
-                    if (!this.userRepository.IsUserExists(turnContext))
+                    if (!userRepository.IsUserExists(turnContext))
                     {
                         await turnContext.SendActivityAsync(
                             "Пожалуйста, пройдите регистрацию, ответив на несколько вопросов",
                             cancellationToken: cancellationToken);
 
-                        await dialogContext.BeginDialogAsync(UserRegistrationDialog.DialogId, cancellationToken: cancellationToken);
+                        await dialogContext.BeginDialogAsync(UserRegistrationDialog.DialogId,
+                            cancellationToken: cancellationToken);
                         return;
                     }
 
-                    await this.SendActionsCard(turnContext, cancellationToken);
+                    await SendActionsCard(turnContext, cancellationToken);
                     break;
             }
         }
 
-        private async Task HandleMessage(ITurnContext turnContext, DialogContext dialogContext, CancellationToken cancellationToken)
+        private async Task HandleMessage(ITurnContext turnContext, DialogContext dialogContext,
+            CancellationToken cancellationToken)
         {
             DialogTurnResult results = await dialogContext.ContinueDialogAsync(cancellationToken);
 
@@ -81,40 +81,41 @@ namespace PsychologyBot.Core.Bot
                     switch (turnContext.Activity.Text)
                     {
                         case "Отправить сообщение":
-                            await dialogContext.BeginDialogAsync(MessageDialog.DialogId, cancellationToken: cancellationToken);
+                            await dialogContext.BeginDialogAsync(MessageDialog.DialogId,
+                                cancellationToken: cancellationToken);
                             break;
                     }
 
                     break;
                 case DialogTurnStatus.Complete:
                 case DialogTurnStatus.Cancelled:
-                    await this.SendActionsCard(turnContext, cancellationToken);
+                    await SendActionsCard(turnContext, cancellationToken);
                     break;
             }
         }
 
         private async Task SendActionsCard(ITurnContext turnContext, CancellationToken cancellationToken)
         {
-            var actions = new List<CardAction>();
+            List<CardAction> actions = new List<CardAction>();
 
             CardAction cardAction = new CardAction
             {
                 Value = "Отправить сообщение",
                 Title = "Отправить сообщение",
-                Type = ActionTypes.ImBack,
+                Type = ActionTypes.ImBack
             };
 
             actions.Add(cardAction);
 
-            var actionsCard = new HeroCard
+            HeroCard actionsCard = new HeroCard
             {
                 Buttons = actions,
-                Text = "Что бы вы хотели бы сделать?",
+                Text = "Что бы вы хотели бы сделать?"
             };
 
-            var reply = turnContext.Activity.CreateReply();
+            Activity reply = turnContext.Activity.CreateReply();
             reply.Attachments.Add(actionsCard.ToAttachment());
-            await turnContext.SendActivityAsync(reply, cancellationToken: cancellationToken);
+            await turnContext.SendActivityAsync(reply, cancellationToken);
         }
     }
 }

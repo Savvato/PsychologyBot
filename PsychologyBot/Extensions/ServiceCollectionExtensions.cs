@@ -1,4 +1,10 @@
-﻿using PsychologyBot.Bot.Dialogs;
+﻿using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.BotFramework;
+using Microsoft.Bot.Builder.Integration.AspNet.Core;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using PsychologyBot.Bot.Dialogs;
 using PsychologyBot.Core.Bot.Accessors;
 using PsychologyBot.Core.Bot.Dialogs;
 using PsychologyBot.Core.Interfaces;
@@ -6,13 +12,6 @@ using PsychologyBot.Infrastructure.Repositories;
 
 namespace PsychologyBot.Extensions
 {
-    using Microsoft.Bot.Builder;
-    using Microsoft.Bot.Builder.BotFramework;
-    using Microsoft.Bot.Builder.Integration.AspNet.Core;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-
     public static class ServiceCollectionExtensions
     {
         public static void AddRepositories(this IServiceCollection services)
@@ -28,7 +27,8 @@ namespace PsychologyBot.Extensions
             services.AddSingleton<MessageDialog>();
         }
 
-        public static void AddPsychologyBot(this IServiceCollection services, IConfiguration configuration, ILoggerFactory loggerFactory)
+        public static void AddPsychologyBot(this IServiceCollection services, IConfiguration configuration,
+            ILoggerFactory loggerFactory)
         {
             ILogger<Startup> logger = loggerFactory.CreateLogger<Startup>();
 
@@ -45,7 +45,7 @@ namespace PsychologyBot.Extensions
             services.AddSingleton(credentialProvider);
             services.AddSingleton(conversationStateAccessors);
 
-            services.AddBot<Core.Bot.Bot>((options) =>
+            services.AddBot<Core.Bot.Bot>(options =>
             {
                 options.CredentialProvider = credentialProvider;
 

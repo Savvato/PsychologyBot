@@ -1,9 +1,8 @@
-﻿using PsychologyBot.Core.Models;
+﻿using System.Collections.Generic;
+using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.ViewModels
 {
-    using System.Collections.Generic;
-
     public class UserViewModel
     {
         public List<User> AllUsers { get; set; }

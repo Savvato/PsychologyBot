@@ -30,32 +30,34 @@ namespace PsychologyBot.Core.Bot.Dialogs
 
             WaterfallStep[] steps =
             {
-                this.AskMessage,
-                this.ApplyMessage,
-                this.ConfirmSend,
-                this.Send,
+                AskMessage,
+                ApplyMessage,
+                ConfirmSend,
+                Send
             };
 
-            this.AddDialog(new WaterfallDialog(WaterfallDialogId, steps));
+            AddDialog(new WaterfallDialog(WaterfallDialogId, steps));
 
-            this.AddDialog(new TextPrompt(TextPromptId));
-            this.AddDialog(new ConfirmPrompt(ConfirmPromptId));
+            AddDialog(new TextPrompt(TextPromptId));
+            AddDialog(new ConfirmPrompt(ConfirmPromptId));
         }
 
-        private async Task<DialogTurnResult> AskMessage(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> AskMessage(WaterfallStepContext stepContext,
+            CancellationToken cancellationToken)
         {
             return await stepContext.PromptAsync(
                 TextPromptId,
-                new PromptOptions()
+                new PromptOptions
                 {
-                    Prompt = MessageFactory.Text("Введите сообщение:"),
+                    Prompt = MessageFactory.Text("Введите сообщение:")
                 },
                 cancellationToken);
         }
 
-        private async Task<DialogTurnResult> ApplyMessage(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> ApplyMessage(WaterfallStepContext stepContext,
+            CancellationToken cancellationToken)
         {
-            MessageState messageState = await this.conversationStateAccessors
+            MessageState messageState = await conversationStateAccessors
                 .MessageStateAccessor
                 .GetAsync(
                     stepContext.Context,
@@ -67,40 +69,40 @@ namespace PsychologyBot.Core.Bot.Dialogs
             return await stepContext.NextAsync(cancellationToken: cancellationToken);
         }
 
-        private async Task<DialogTurnResult> ConfirmSend(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> ConfirmSend(WaterfallStepContext stepContext,
+            CancellationToken cancellationToken)
         {
-            MessageState messageState = await this.conversationStateAccessors
+            MessageState messageState = await conversationStateAccessors
                 .MessageStateAccessor
                 .GetAsync(
                     stepContext.Context,
                     () => new MessageState(),
                     cancellationToken);
-            await stepContext.Context.SendActivityAsync($"Вы написали: {messageState.MessageString}", cancellationToken: cancellationToken);
+            await stepContext.Context.SendActivityAsync($"Вы написали: {messageState.MessageString}",
+                cancellationToken: cancellationToken);
 
             return await stepContext.PromptAsync(
                 ConfirmPromptId,
-                new PromptOptions()
+                new PromptOptions
                 {
-                    Prompt = MessageFactory.Text("Отправить это сообщение психологу?"),
+                    Prompt = MessageFactory.Text("Отправить это сообщение психологу?")
                 },
                 cancellationToken);
         }
 
         private async Task<DialogTurnResult> Send(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            if (!((bool) stepContext.Result))
-            {
+            if (!(bool) stepContext.Result)
                 return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
-            }
 
-            MessageState messageState = await this.conversationStateAccessors
+            MessageState messageState = await conversationStateAccessors
                 .MessageStateAccessor
                 .GetAsync(
                     stepContext.Context,
                     () => new MessageState(),
                     cancellationToken);
 
-            User user = this.userRepository.GetCurrentUser(stepContext.Context);
+            User user = userRepository.GetCurrentUser(stepContext.Context);
             user.Messages.Add(new Message(messageState.MessageString, true));
 
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);

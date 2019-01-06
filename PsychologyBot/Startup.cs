@@ -1,13 +1,12 @@
-﻿namespace PsychologyBot
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Bot.Builder.Integration.AspNet.Core;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using PsychologyBot.Extensions;
+
+namespace PsychologyBot
 {
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.Bot.Builder.Integration.AspNet.Core;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-
-    using PsychologyBot.Extensions;
-
     public class Startup
     {
         private readonly IConfiguration configuration;
@@ -22,7 +21,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddPsychologyBot(this.configuration, this.loggerFactory);
+            services.AddPsychologyBot(configuration, loggerFactory);
             services.AddRepositories();
             services.AddDialogs();
         }
