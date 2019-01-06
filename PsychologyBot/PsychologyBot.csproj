@@ -33,6 +33,13 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\PsychologyBot.Core.Bot\PsychologyBot.Core.Bot.csproj" />
+    <ProjectReference Include="..\PsychologyBot.Core\PsychologyBot.Core.csproj" />
+    <ProjectReference Include="..\PsychologyBot.Infrastructure\PsychologyBot.Infrastructure.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

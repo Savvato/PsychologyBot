@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="25.0.2" />
+    <PackageReference Include="Microsoft.Bot.Builder" Version="4.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PsychologyBot.Core\PsychologyBot.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Bot.Builder.Dialogs">
+      <HintPath>C:\Users\Savvato\.nuget\packages\microsoft.bot.builder.dialogs\4.1.5\lib\netstandard2.0\Microsoft.Bot.Builder.Dialogs.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

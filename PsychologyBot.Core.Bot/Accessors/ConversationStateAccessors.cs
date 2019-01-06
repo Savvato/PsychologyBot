@@ -1,10 +1,9 @@
-﻿namespace PsychologyBot.Bot.Accessors
+﻿using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
+using PsychologyBot.Core.Bot.States;
+
+namespace PsychologyBot.Core.Bot.Accessors
 {
-    using Microsoft.Bot.Builder;
-    using Microsoft.Bot.Builder.Dialogs;
-
-    using PsychologyBot.Bot.States;
-
     public class ConversationStateAccessors
     {
         public ConversationStateAccessors(IPropertyManager conversationState)

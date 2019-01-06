@@ -1,4 +1,9 @@
-﻿namespace PsychologyBot.Bot.Dialogs
+﻿using PsychologyBot.Core.Bot.Accessors;
+using PsychologyBot.Core.Bot.States;
+using PsychologyBot.Core.Interfaces;
+using PsychologyBot.Core.Models;
+
+namespace PsychologyBot.Bot.Dialogs
 {
     using System.Collections.Generic;
     using System.Threading;
@@ -10,11 +15,6 @@
     using Microsoft.Bot.Builder;
     using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Builder.Dialogs.Choices;
-
-    using PsychologyBot.Bot.Accessors;
-    using PsychologyBot.Bot.States;
-    using PsychologyBot.Models;
-    using PsychologyBot.Repositories;
 
     public class UserRegistrationDialog : ComponentDialog
     {

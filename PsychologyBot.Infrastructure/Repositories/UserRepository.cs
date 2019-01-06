@@ -1,28 +1,11 @@
-﻿namespace PsychologyBot.Repositories
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Bot.Builder;
+using PsychologyBot.Core.Interfaces;
+using PsychologyBot.Core.Models;
+
+namespace PsychologyBot.Infrastructure.Repositories
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Microsoft.Bot.Builder;
-
-    using PsychologyBot.Models;
-
-    public interface IUserBotRepository
-    {
-        User GetCurrentUser(ITurnContext turnContext);
-
-        bool IsUserExists(ITurnContext turnContext);
-
-        void AddUser(User user);
-    }
-
-    public interface IUserRepository
-    {
-        List<User> GetAllUsers();
-
-        User GetUserById(string id);
-    }
-
     public class UserRepository : IUserBotRepository, IUserRepository
     {
         private List<User> users;

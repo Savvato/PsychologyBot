@@ -1,4 +1,10 @@
-﻿namespace PsychologyBot.Extensions
+﻿using PsychologyBot.Bot.Dialogs;
+using PsychologyBot.Core.Bot.Accessors;
+using PsychologyBot.Core.Bot.Dialogs;
+using PsychologyBot.Core.Interfaces;
+using PsychologyBot.Infrastructure.Repositories;
+
+namespace PsychologyBot.Extensions
 {
     using Microsoft.Bot.Builder;
     using Microsoft.Bot.Builder.BotFramework;
@@ -6,10 +12,6 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-
-    using PsychologyBot.Bot.Accessors;
-    using PsychologyBot.Bot.Dialogs;
-    using PsychologyBot.Repositories;
 
     public static class ServiceCollectionExtensions
     {
@@ -43,7 +45,7 @@
             services.AddSingleton(credentialProvider);
             services.AddSingleton(conversationStateAccessors);
 
-            services.AddBot<Bot.Bot>(options =>
+            services.AddBot<Core.Bot.Bot>((options) =>
             {
                 options.CredentialProvider = credentialProvider;
 

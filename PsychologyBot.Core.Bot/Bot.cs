@@ -1,19 +1,18 @@
-﻿namespace PsychologyBot.Bot
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Schema;
+using Microsoft.Extensions.Logging;
+using PsychologyBot.Bot.Dialogs;
+using PsychologyBot.Core.Bot.Accessors;
+using PsychologyBot.Core.Bot.Dialogs;
+using PsychologyBot.Core.Interfaces;
+
+namespace PsychologyBot.Core.Bot
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    using Microsoft.Bot.Builder;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Schema;
-    using Microsoft.Extensions.Logging;
-
-    using PsychologyBot.Bot.Accessors;
-    using PsychologyBot.Bot.Dialogs;
-    using PsychologyBot.Repositories;
-
     public class Bot : IBot
     {
         private readonly IUserBotRepository userRepository;

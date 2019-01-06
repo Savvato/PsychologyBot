@@ -1,9 +1,8 @@
-﻿namespace PsychologyBot.Models
+﻿using System.Collections.Generic;
+using Microsoft.Bot.Schema;
+
+namespace PsychologyBot.Core.Models
 {
-    using System.Collections.Generic;
-
-    using Microsoft.Bot.Schema;
-
     public class User
     {
         public string Id { get; }

@@ -1,4 +1,4 @@
-﻿namespace PsychologyBot.Models
+﻿namespace PsychologyBot.Core.Models
 {
     public enum Gender
     {

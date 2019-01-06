@@ -1,16 +1,14 @@
-﻿namespace PsychologyBot.Bot.Dialogs
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
+using PsychologyBot.Core.Bot.Accessors;
+using PsychologyBot.Core.Bot.States;
+using PsychologyBot.Core.Interfaces;
+using PsychologyBot.Core.Models;
+
+namespace PsychologyBot.Core.Bot.Dialogs
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    using Microsoft.Bot.Builder;
-    using Microsoft.Bot.Builder.Dialogs;
-
-    using PsychologyBot.Bot.Accessors;
-    using PsychologyBot.Bot.States;
-    using PsychologyBot.Models;
-    using PsychologyBot.Repositories;
-
     public class MessageDialog : ComponentDialog
     {
         public const string DialogId = nameof(MessageDialog);

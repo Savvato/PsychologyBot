@@ -1,4 +1,4 @@
-﻿namespace PsychologyBot.Bot.States
+﻿namespace PsychologyBot.Core.Bot.States
 {
     public class MessageState
     {

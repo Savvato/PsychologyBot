@@ -8,9 +8,6 @@
     using Microsoft.Bot.Builder.BotFramework;
     using Microsoft.Bot.Builder.Integration;
 
-    using PsychologyBot.Bot.States;
-    using PsychologyBot.Models;
-    using PsychologyBot.Repositories;
     using PsychologyBot.ViewModels;
 
     public class HomeController : Controller
