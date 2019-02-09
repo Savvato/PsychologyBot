@@ -4,7 +4,7 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using PsychologyBot.Bot.Dialogs;
+
 using PsychologyBot.Core.Bot.Accessors;
 using PsychologyBot.Core.Bot.Dialogs;
 using PsychologyBot.Core.Interfaces;

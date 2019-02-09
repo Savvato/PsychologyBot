@@ -6,7 +6,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
-using PsychologyBot.Bot.Dialogs;
+
 using PsychologyBot.Core.Bot.Accessors;
 using PsychologyBot.Core.Bot.Dialogs;
 using PsychologyBot.Core.Interfaces;
