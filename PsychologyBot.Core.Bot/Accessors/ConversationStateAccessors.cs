@@ -10,13 +10,10 @@ namespace PsychologyBot.Core.Bot.Accessors
         {
             DialogStateAccessor = conversationState.CreateProperty<DialogState>(nameof(DialogState));
             RegistrationStateAccessor = conversationState.CreateProperty<RegistrationState>(nameof(RegistrationState));
-            MessageStateAccessor = conversationState.CreateProperty<MessageState>(nameof(MessageState));
         }
 
         public IStatePropertyAccessor<DialogState> DialogStateAccessor { get; }
 
         public IStatePropertyAccessor<RegistrationState> RegistrationStateAccessor { get; }
-
-        public IStatePropertyAccessor<MessageState> MessageStateAccessor { get; }
     }
 }

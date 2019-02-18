@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PsychologyBot.Bot.Dialogs;
 using PsychologyBot.Core.Bot.Accessors;
-using PsychologyBot.Core.Bot.Dialogs;
 using PsychologyBot.Core.Interfaces;
 using PsychologyBot.Infrastructure.Repositories;
 
@@ -24,7 +23,6 @@ namespace PsychologyBot.Extensions
         public static void AddDialogs(this IServiceCollection services)
         {
             services.AddSingleton<UserRegistrationDialog>();
-            services.AddSingleton<MessageDialog>();
         }
 
         public static void AddPsychologyBot(this IServiceCollection services, IConfiguration configuration,
