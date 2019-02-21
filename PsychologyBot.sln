@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsychologyBot", "PsychologyBot\PsychologyBot.csproj", "{EB770034-2B44-46DD-BFC6-AABCE6C357B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsychologyBot.Application", "PsychologyBot.Application\PsychologyBot.Application.csproj", "{EB770034-2B44-46DD-BFC6-AABCE6C357B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsychologyBot.Infrastructure", "PsychologyBot.Infrastructure\PsychologyBot.Infrastructure.csproj", "{797D2F20-0A87-41B3-BF83-778B8E9BDD2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsychologyBot.Infrastructure", "PsychologyBot.Infrastructure\PsychologyBot.Infrastructure.csproj", "{797D2F20-0A87-41B3-BF83-778B8E9BDD2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsychologyBot.Core", "PsychologyBot.Core\PsychologyBot.Core.csproj", "{E4474BFA-F448-462D-B904-EBE23F49CD8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsychologyBot.Core", "PsychologyBot.Core\PsychologyBot.Core.csproj", "{E4474BFA-F448-462D-B904-EBE23F49CD8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsychologyBot.Core.Bot", "PsychologyBot.Core.Bot\PsychologyBot.Core.Bot.csproj", "{0512ED36-A4C6-4CD1-8EF4-04D42E889DB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsychologyBot.Core.Bot", "PsychologyBot.Core.Bot\PsychologyBot.Core.Bot.csproj", "{0512ED36-A4C6-4CD1-8EF4-04D42E889DB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

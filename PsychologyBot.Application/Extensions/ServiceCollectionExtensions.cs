@@ -1,16 +1,16 @@
-﻿using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.BotFramework;
-using Microsoft.Bot.Builder.Integration.AspNet.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-
-using PsychologyBot.Core.Bot.Accessors;
-using PsychologyBot.Core.Interfaces;
-using PsychologyBot.Infrastructure.Repositories;
-
-namespace PsychologyBot.Extensions
+﻿namespace PsychologyBot.Application.Extensions
 {
+    using Microsoft.Bot.Builder;
+    using Microsoft.Bot.Builder.BotFramework;
+    using Microsoft.Bot.Builder.Integration.AspNet.Core;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using PsychologyBot.Core.Bot.Accessors;
+    using PsychologyBot.Core.Bot.Dialogs;
+    using PsychologyBot.Core.Interfaces;
+    using PsychologyBot.Infrastructure.Repositories;
+
     public static class ServiceCollectionExtensions
     {
         public static void AddRepositories(this IServiceCollection services)

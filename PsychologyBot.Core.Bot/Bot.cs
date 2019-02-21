@@ -7,6 +7,7 @@ using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Logging;
 
 using PsychologyBot.Core.Bot.Accessors;
+using PsychologyBot.Core.Bot.Dialogs;
 using PsychologyBot.Core.Interfaces;
 using PsychologyBot.Core.Models;
 

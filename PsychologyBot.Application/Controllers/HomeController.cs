@@ -1,16 +1,17 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.BotFramework;
-using Microsoft.Bot.Builder.Integration;
-using PsychologyBot.Core.Bot.States;
-using PsychologyBot.Core.Interfaces;
-using PsychologyBot.Core.Models;
-using PsychologyBot.ViewModels;
+﻿using PsychologyBot.Application.ViewModels;
 
-namespace PsychologyBot.Controllers
+namespace PsychologyBot.Application.Controllers
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Bot.Builder;
+    using Microsoft.Bot.Builder.BotFramework;
+    using Microsoft.Bot.Builder.Integration;
+    using PsychologyBot.Core.Bot.States;
+    using PsychologyBot.Core.Interfaces;
+    using PsychologyBot.Core.Models;
+
     public class HomeController : Controller
     {
         private readonly BotFrameworkAdapter adapter;

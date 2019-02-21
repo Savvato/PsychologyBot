@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Bot.Builder.Integration.AspNet.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using PsychologyBot.Extensions;
-
-namespace PsychologyBot
+﻿namespace PsychologyBot.Application
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.Bot.Builder.Integration.AspNet.Core;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using PsychologyBot.Application.Extensions;
+
     public class Startup
     {
         private readonly IConfiguration configuration;

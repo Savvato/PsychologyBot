@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
-using Serilog;
-
-namespace PsychologyBot
+﻿namespace PsychologyBot.Application
 {
+    using Microsoft.AspNetCore;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Logging;
+    using Serilog;
+
     public class Program
     {
         public static void Main(string[] args)
