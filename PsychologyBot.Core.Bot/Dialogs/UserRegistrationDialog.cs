@@ -162,6 +162,10 @@
             };
             userRepository.AddUser(user);
 
+            await stepContext.Context.SendActivityAsync(
+                "Регистрация завершена, теперь все ваши сообщения будут отправляться психологу",
+                cancellationToken: cancellationToken);
+
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
     }
