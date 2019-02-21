@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.Core.Interfaces

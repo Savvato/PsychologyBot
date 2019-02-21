@@ -21,7 +21,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddPsychologyBot(configuration, loggerFactory);
+            services.AddPsychologyBot(this.configuration, this.loggerFactory);
             services.AddRepositories();
             services.AddDialogs();
         }

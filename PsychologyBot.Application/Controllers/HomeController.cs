@@ -1,6 +1,4 @@
-﻿using PsychologyBot.Application.ViewModels;
-
-namespace PsychologyBot.Application.Controllers
+﻿namespace PsychologyBot.Application.Controllers
 {
     using System.Threading;
     using System.Threading.Tasks;
@@ -8,6 +6,7 @@ namespace PsychologyBot.Application.Controllers
     using Microsoft.Bot.Builder;
     using Microsoft.Bot.Builder.BotFramework;
     using Microsoft.Bot.Builder.Integration;
+    using PsychologyBot.Application.ViewModels;
     using PsychologyBot.Core.Bot.States;
     using PsychologyBot.Core.Interfaces;
     using PsychologyBot.Core.Models;
@@ -31,40 +30,39 @@ namespace PsychologyBot.Application.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View(new UserViewModel
+            return this.View(new UserViewModel
             {
-                AllUsers = userRepository.GetAllUsers()
+                AllUsers = this.userRepository.GetAllUsers()
             });
         }
 
         [HttpGet]
         public IActionResult User(string id)
         {
-            return View(new UserViewModel
+            return this.View(new UserViewModel
             {
-                AllUsers = userRepository.GetAllUsers(),
-                SelectedUser = userRepository.GetUserById(id)
+                AllUsers = this.userRepository.GetAllUsers(),
+                SelectedUser = this.userRepository.GetUserById(id)
             });
         }
 
         [HttpPost]
         public async Task<IActionResult> Send(string id, MessageState messageState)
         {
-            User user = userRepository.GetUserById(id);
+            User user = this.userRepository.GetUserById(id);
 
             Message message = new Message(messageState.MessageString, false);
 
             user.Messages.Add(message);
 
-            await adapter.ContinueConversationAsync(
-                credentialProvider.AppId,
+            await this.adapter.ContinueConversationAsync(this.credentialProvider.AppId,
                 user.ConversationReference,
                 async (turnContext, cancellationToken) => await turnContext.SendActivityAsync(
                     message.MessageString,
                     cancellationToken: cancellationToken),
                 default(CancellationToken));
 
-            return RedirectToAction("User", new {id});
+            return this.RedirectToAction("User", new {id});
         }
     }
 }

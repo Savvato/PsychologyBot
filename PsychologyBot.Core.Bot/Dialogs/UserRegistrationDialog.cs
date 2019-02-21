@@ -1,21 +1,21 @@
-﻿namespace PsychologyBot.Core.Bot.Dialogs
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+using Bogus;
+using Bogus.DataSets;
+
+using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Choices;
+
+using PsychologyBot.Core.Bot.Accessors;
+using PsychologyBot.Core.Bot.States;
+using PsychologyBot.Core.Interfaces;
+using PsychologyBot.Core.Models;
+
+namespace PsychologyBot.Core.Bot.Dialogs
 {
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    using Bogus;
-    using Bogus.DataSets;
-
-    using Microsoft.Bot.Builder;
-    using Microsoft.Bot.Builder.Dialogs;
-    using Microsoft.Bot.Builder.Dialogs.Choices;
-
-    using PsychologyBot.Core.Bot.Accessors;
-    using PsychologyBot.Core.Bot.States;
-    using PsychologyBot.Core.Interfaces;
-    using PsychologyBot.Core.Models;
-
     public class UserRegistrationDialog : ComponentDialog
     {
         public const string DialogId = nameof(UserRegistrationDialog);
@@ -37,23 +37,19 @@
             this.conversationStateAccessors = conversationStateAccessors;
             this.userRepository = userRepository;
 
-            userFaker = new Faker();
+            this.userFaker = new Faker();
 
             WaterfallStep[] steps =
             {
-                AskGender,
-                ApplyGender,
-                SuggestName,
-                AskAboutFamily,
-                AskAboutConversationTroubles,
-                Register
+                this.AskGender, this.ApplyGender, this.SuggestName, this.AskAboutFamily,
+                this.AskAboutConversationTroubles, this.Register
             };
 
-            AddDialog(new WaterfallDialog(WaterfallDialogId, steps));
+            this.AddDialog(new WaterfallDialog(WaterfallDialogId, steps));
 
-            AddDialog(new ChoicePrompt(ChoicePromptId));
+            this.AddDialog(new ChoicePrompt(ChoicePromptId));
 
-            AddDialog(new ConfirmPrompt(ConfirmPromptId));
+            this.AddDialog(new ConfirmPrompt(ConfirmPromptId));
         }
 
         private async Task<DialogTurnResult> AskGender(WaterfallStepContext stepContext,
@@ -73,7 +69,7 @@
         private async Task<DialogTurnResult> ApplyGender(WaterfallStepContext stepContext,
             CancellationToken cancellationToken)
         {
-            RegistrationState registrationState = await conversationStateAccessors
+            RegistrationState registrationState = await this.conversationStateAccessors
                 .RegistrationStateAccessor
                 .GetAsync(
                     stepContext.Context,
@@ -88,17 +84,16 @@
         private async Task<DialogTurnResult> SuggestName(WaterfallStepContext stepContext,
             CancellationToken cancellationToken)
         {
-            RegistrationState registrationState = await conversationStateAccessors
+            RegistrationState registrationState = await this.conversationStateAccessors
                 .RegistrationStateAccessor
                 .GetAsync(
                     stepContext.Context,
                     () => new RegistrationState(),
                     cancellationToken);
 
-            registrationState.Name =
-                userFaker.Name.FullName(registrationState.Gender == Gender.Male
-                    ? Name.Gender.Male
-                    : Name.Gender.Female);
+            registrationState.Name = this.userFaker.Name.FullName(registrationState.Gender == Gender.Male
+                ? Name.Gender.Male
+                : Name.Gender.Female);
 
             await stepContext.Context.SendActivityAsync(
                 $"Для общения с психологом Вам присвоен псевдоним: {registrationState.Name}",
@@ -122,7 +117,7 @@
         private async Task<DialogTurnResult> AskAboutConversationTroubles(WaterfallStepContext stepContext,
             CancellationToken cancellationToken)
         {
-            RegistrationState registrationState = await conversationStateAccessors
+            RegistrationState registrationState = await this.conversationStateAccessors
                 .RegistrationStateAccessor
                 .GetAsync(
                     stepContext.Context,
@@ -143,7 +138,7 @@
         private async Task<DialogTurnResult> Register(WaterfallStepContext stepContext,
             CancellationToken cancellationToken)
         {
-            RegistrationState registrationState = await conversationStateAccessors
+            RegistrationState registrationState = await this.conversationStateAccessors
                 .RegistrationStateAccessor
                 .GetAsync(
                     stepContext.Context,
@@ -160,7 +155,7 @@
                 HasFamily = registrationState.HasFamily,
                 HasConversationTroubles = registrationState.HasConversationTroubles
             };
-            userRepository.AddUser(user);
+            this.userRepository.AddUser(user);
 
             await stepContext.Context.SendActivityAsync(
                 "Регистрация завершена, теперь все ваши сообщения будут отправляться психологу",

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
+
 using PsychologyBot.Core.Bot.States;
 
 namespace PsychologyBot.Core.Bot.Accessors
@@ -8,8 +9,9 @@ namespace PsychologyBot.Core.Bot.Accessors
     {
         public ConversationStateAccessors(IPropertyManager conversationState)
         {
-            DialogStateAccessor = conversationState.CreateProperty<DialogState>(nameof(DialogState));
-            RegistrationStateAccessor = conversationState.CreateProperty<RegistrationState>(nameof(RegistrationState));
+            this.DialogStateAccessor = conversationState.CreateProperty<DialogState>(nameof(DialogState));
+            this.RegistrationStateAccessor =
+                conversationState.CreateProperty<RegistrationState>(nameof(RegistrationState));
         }
 
         public IStatePropertyAccessor<DialogState> DialogStateAccessor { get; }

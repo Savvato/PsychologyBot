@@ -6,6 +6,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using PsychologyBot.Core.Bot;
     using PsychologyBot.Core.Bot.Accessors;
     using PsychologyBot.Core.Bot.Dialogs;
     using PsychologyBot.Core.Interfaces;
@@ -43,7 +44,7 @@
             services.AddSingleton(credentialProvider);
             services.AddSingleton(conversationStateAccessors);
 
-            services.AddBot<Core.Bot.Bot>(options =>
+            services.AddBot<Bot>(options =>
             {
                 options.CredentialProvider = credentialProvider;
 

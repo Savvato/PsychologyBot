@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Microsoft.Bot.Builder;
+
 using PsychologyBot.Core.Interfaces;
 using PsychologyBot.Core.Models;
 
@@ -12,32 +14,32 @@ namespace PsychologyBot.Infrastructure.Repositories
 
         public UserRepository()
         {
-            users = new List<User>();
+            this.users = new List<User>();
         }
 
         public User GetCurrentUser(ITurnContext turnContext)
         {
-            return users.FirstOrDefault(user => user.Id == turnContext.Activity.From.Id);
+            return this.users.FirstOrDefault(user => user.Id == turnContext.Activity.From.Id);
         }
 
         public bool IsUserExists(ITurnContext turnContext)
         {
-            return users.Exists(user => user.Id == turnContext.Activity.From.Id);
+            return this.users.Exists(user => user.Id == turnContext.Activity.From.Id);
         }
 
         public void AddUser(User user)
         {
-            users.Add(user);
+            this.users.Add(user);
         }
 
         public List<User> GetAllUsers()
         {
-            return users;
+            return this.users;
         }
 
         public User GetUserById(string id)
         {
-            return users.FirstOrDefault(user => user.Id == id);
+            return this.users.FirstOrDefault(user => user.Id == id);
         }
     }
 }

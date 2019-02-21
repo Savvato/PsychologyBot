@@ -4,8 +4,8 @@
     {
         public Message(string messageString, bool isUserMessage)
         {
-            MessageString = messageString;
-            IsUserMessage = isUserMessage;
+            this.MessageString = messageString;
+            this.IsUserMessage = isUserMessage;
         }
 
         public string MessageString { get; }

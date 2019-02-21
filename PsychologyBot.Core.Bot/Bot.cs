@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
@@ -29,27 +30,30 @@ namespace PsychologyBot.Core.Bot
             this.userRepository = userRepository;
             this.conversationStateAccessors = conversationStateAccessors;
 
-            dialogs = new DialogSet(this.conversationStateAccessors.DialogStateAccessor);
-            dialogs.Add(userRegistrationDialog);
+            this.dialogs = new DialogSet(this.conversationStateAccessors.DialogStateAccessor);
+            this.dialogs.Add(userRegistrationDialog);
         }
 
         public async Task OnTurnAsync(ITurnContext turnContext,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            DialogContext dialogContext = await dialogs.CreateContextAsync(turnContext, cancellationToken);
+            DialogContext dialogContext = await this.dialogs.CreateContextAsync(turnContext, cancellationToken);
 
             switch (turnContext.Activity.Type)
             {
                 case ActivityTypes.Message:
-                    await HandleMessage(turnContext, dialogContext, cancellationToken);
+                    await this.HandleMessage(turnContext, dialogContext, cancellationToken);
                     break;
                 case ActivityTypes.ConversationUpdate:
                     string botId = turnContext.Activity.Recipient.Id;
                     bool isBotAdded = turnContext.Activity.MembersAdded.ToList().Exists(member => member.Id == botId);
 
-                    if (isBotAdded) return;
+                    if (isBotAdded)
+                    {
+                        return;
+                    }
 
-                    if (!userRepository.IsUserExists(turnContext))
+                    if (!this.userRepository.IsUserExists(turnContext))
                     {
                         await turnContext.SendActivityAsync(
                             "Пожалуйста, пройдите регистрацию, ответив на несколько вопросов",
@@ -58,6 +62,7 @@ namespace PsychologyBot.Core.Bot
                         await dialogContext.BeginDialogAsync(UserRegistrationDialog.DialogId,
                             cancellationToken: cancellationToken);
                     }
+
                     break;
             }
         }
@@ -71,10 +76,10 @@ namespace PsychologyBot.Core.Bot
             {
                 // There wasn't any active dialog
                 case DialogTurnStatus.Empty:
-                    User user = userRepository.GetCurrentUser(turnContext);
+                    User user = this.userRepository.GetCurrentUser(turnContext);
                     user.Messages.Add(new Message(
-                        messageString: turnContext.Activity.Text, 
-                        isUserMessage: true));
+                        turnContext.Activity.Text,
+                        true));
 
                     await turnContext.SendActivityAsync(
                         "Ваше сообщение отправлено психологу, пожалуйста, ожидайте ответа",

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using Microsoft.Bot.Schema;
 
 namespace PsychologyBot.Core.Models
@@ -7,9 +8,9 @@ namespace PsychologyBot.Core.Models
     {
         public User(string id, ConversationReference conversationReference)
         {
-            Id = id;
-            ConversationReference = conversationReference;
-            Messages = new List<Message>();
+            this.Id = id;
+            this.ConversationReference = conversationReference;
+            this.Messages = new List<Message>();
         }
 
         public string Id { get; }

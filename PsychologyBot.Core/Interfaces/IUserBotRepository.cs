@@ -1,4 +1,5 @@
 ﻿using Microsoft.Bot.Builder;
+
 using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.Core.Interfaces
