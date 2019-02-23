@@ -262,3 +262,6 @@ __pycache__/
 
 # Logs
 *.log
+
+# Compiled resources 
+PsychologyBot.Application/wwwroot
