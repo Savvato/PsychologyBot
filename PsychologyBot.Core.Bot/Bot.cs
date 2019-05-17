@@ -10,25 +10,29 @@ using Microsoft.Extensions.Logging;
 using PsychologyBot.Core.Bot.Accessors;
 using PsychologyBot.Core.Bot.Dialogs;
 using PsychologyBot.Core.Interfaces;
-using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.Core.Bot
 {
+    using PsychologyBot.Network.Hubs;
+
     public class Bot : IBot
     {
         private readonly ConversationStateAccessors conversationStateAccessors;
 
         private readonly DialogSet dialogs;
         private readonly IUserBotRepository userRepository;
+        private readonly ChatHub chatHub;
 
         public Bot(
             IUserBotRepository userRepository,
             ConversationStateAccessors conversationStateAccessors,
             UserRegistrationDialog userRegistrationDialog,
+            ChatHub chatHub,
             ILogger<Bot> logger)
         {
             this.userRepository = userRepository;
             this.conversationStateAccessors = conversationStateAccessors;
+            this.chatHub = chatHub;
 
             this.dialogs = new DialogSet(this.conversationStateAccessors.DialogStateAccessor);
             this.dialogs.Add(userRegistrationDialog);
@@ -76,10 +80,9 @@ namespace PsychologyBot.Core.Bot
             {
                 // There wasn't any active dialog
                 case DialogTurnStatus.Empty:
-                    User user = this.userRepository.GetCurrentUser(turnContext);
-                    user.Messages.Add(new Message(
-                        turnContext.Activity.Text,
-                        true));
+                    await chatHub.SendMessageToPsychologyst(
+                        userId: turnContext.Activity.From.Id, 
+                        text: turnContext.Activity.Text);
 
                     await turnContext.SendActivityAsync(
                         "Ваше сообщение отправлено психологу, пожалуйста, ожидайте ответа",

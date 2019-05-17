@@ -12,5 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PsychologyBot.Core\PsychologyBot.Core.csproj" />
+    <ProjectReference Include="..\PsychologyBot.Network\PsychologyBot.Network.csproj" />
   </ItemGroup>
 </Project>

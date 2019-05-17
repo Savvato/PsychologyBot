@@ -18,6 +18,7 @@
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.2" />
     <PackageReference Include="AsyncUsageAnalyzers" Version="1.0.0-alpha003" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.Bot.Builder" Version="4.2.2" />
     <PackageReference Include="Microsoft.Bot.Builder.Dialogs" Version="4.2.2" />
     <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.2.2" />
@@ -36,6 +37,7 @@
     <ProjectReference Include="..\PsychologyBot.Core.Bot\PsychologyBot.Core.Bot.csproj" />
     <ProjectReference Include="..\PsychologyBot.Core\PsychologyBot.Core.csproj" />
     <ProjectReference Include="..\PsychologyBot.Infrastructure\PsychologyBot.Infrastructure.csproj" />
+    <ProjectReference Include="..\PsychologyBot.Network\PsychologyBot.Network.csproj" />
   </ItemGroup>
 
 

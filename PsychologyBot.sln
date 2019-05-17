@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2041
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsychologyBot.Application", "PsychologyBot.Application\PsychologyBot.Application.csproj", "{EB770034-2B44-46DD-BFC6-AABCE6C357B1}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsychologyBot.Core", "PsychologyBot.Core\PsychologyBot.Core.csproj", "{E4474BFA-F448-462D-B904-EBE23F49CD8A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PsychologyBot.Core.Bot", "PsychologyBot.Core.Bot\PsychologyBot.Core.Bot.csproj", "{0512ED36-A4C6-4CD1-8EF4-04D42E889DB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsychologyBot.Network", "PsychologyBot.Network\PsychologyBot.Network.csproj", "{5C1E6456-455F-48EF-8FC8-9B6915BC40E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{0512ED36-A4C6-4CD1-8EF4-04D42E889DB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0512ED36-A4C6-4CD1-8EF4-04D42E889DB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0512ED36-A4C6-4CD1-8EF4-04D42E889DB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C1E6456-455F-48EF-8FC8-9B6915BC40E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C1E6456-455F-48EF-8FC8-9B6915BC40E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C1E6456-455F-48EF-8FC8-9B6915BC40E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C1E6456-455F-48EF-8FC8-9B6915BC40E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
