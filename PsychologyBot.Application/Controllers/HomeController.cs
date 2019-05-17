@@ -24,7 +24,7 @@
         {
             this.userRepository = userRepository;
             this.credentialProvider = credentialProvider;
-            this.adapter = (BotFrameworkAdapter) adapter;
+            this.adapter = (BotFrameworkAdapter)adapter;
         }
 
         [HttpGet]
@@ -55,7 +55,8 @@
 
             user.Messages.Add(message);
 
-            await this.adapter.ContinueConversationAsync(this.credentialProvider.AppId,
+            await this.adapter.ContinueConversationAsync(
+                this.credentialProvider.AppId,
                 user.ConversationReference,
                 async (turnContext, cancellationToken) => await turnContext.SendActivityAsync(
                     message.MessageString,
