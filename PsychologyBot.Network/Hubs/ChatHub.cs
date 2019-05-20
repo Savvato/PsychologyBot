@@ -51,5 +51,10 @@
 
             await this.Clients.All.SendAsync(method: "chatUpdate", arg1: userId, arg2: message);
         }
+
+        public async Task UserAdded(User user)
+        {
+            await this.Clients.All.SendAsync(method: "userAdded", arg1: user);
+        }
     }
 }

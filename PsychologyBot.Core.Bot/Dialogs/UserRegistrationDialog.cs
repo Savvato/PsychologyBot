@@ -16,6 +16,8 @@ using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.Core.Bot.Dialogs
 {
+    using PsychologyBot.Network.Hubs;
+
     public class UserRegistrationDialog : ComponentDialog
     {
         public const string DialogId = nameof(UserRegistrationDialog);
@@ -28,14 +30,17 @@ namespace PsychologyBot.Core.Bot.Dialogs
 
         private readonly Faker userFaker;
         private readonly IUserBotRepository userRepository;
+        private readonly ChatHub chatHub;
 
         public UserRegistrationDialog(
             ConversationStateAccessors conversationStateAccessors,
-            IUserBotRepository userRepository)
+            IUserBotRepository userRepository, 
+            ChatHub chatHub)
             : base(DialogId)
         {
             this.conversationStateAccessors = conversationStateAccessors;
             this.userRepository = userRepository;
+            this.chatHub = chatHub;
 
             this.userFaker = new Faker();
 
@@ -155,7 +160,9 @@ namespace PsychologyBot.Core.Bot.Dialogs
                 HasFamily = registrationState.HasFamily,
                 HasConversationTroubles = registrationState.HasConversationTroubles
             };
+
             this.userRepository.AddUser(user);
+            await this.chatHub.UserAdded(user);
 
             await stepContext.Context.SendActivityAsync(
                 "Регистрация завершена, теперь все ваши сообщения будут отправляться психологу",
