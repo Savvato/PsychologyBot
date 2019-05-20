@@ -1,7 +1,7 @@
 import { Message } from './message';
 
 export class User {
-    id: Number;
+    id: String;
     name: String;
     gender: String;
     hasFamily: Boolean;

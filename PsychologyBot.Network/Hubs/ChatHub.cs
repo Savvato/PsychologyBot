@@ -1,10 +1,12 @@
 ﻿namespace PsychologyBot.Network.Hubs
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Bot.Builder;
     using Microsoft.Bot.Builder.BotFramework;
+    using Microsoft.Bot.Builder.Integration;
 
     using PsychologyBot.Core.Interfaces;
     using PsychologyBot.Core.Models;
@@ -15,11 +17,17 @@
         private readonly BotFrameworkAdapter adapter;
         private readonly ConfigurationCredentialProvider credentialProvider;
 
-        public ChatHub(IUserRepository userRepository, BotFrameworkAdapter adapter, ConfigurationCredentialProvider credentialProvider)
+        public ChatHub(IUserRepository userRepository, IAdapterIntegration adapter, ConfigurationCredentialProvider credentialProvider)
         {
             this.userRepository = userRepository;
-            this.adapter = adapter;
+            this.adapter = (BotFrameworkAdapter)adapter;
             this.credentialProvider = credentialProvider;
+        }
+
+        public async Task GetAllUsers()
+        {
+            List<User> users = this.userRepository.GetAllUsers();
+            await this.Clients.Caller.SendAsync(method: "allUsers", users);
         }
 
         public async Task SendMessageToUser(string userId, string text)
@@ -50,11 +58,6 @@
             user.Messages.Add(message);
 
             await this.Clients.All.SendAsync(method: "chatUpdate", arg1: userId, arg2: message);
-        }
-
-        public async Task UserAdded(User user)
-        {
-            await this.Clients.All.SendAsync(method: "userAdded", arg1: user);
         }
     }
 }

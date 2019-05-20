@@ -33,12 +33,12 @@
         {
             app.UseDefaultFiles()
                 .UseStaticFiles()
-                .UseBotFramework()
-                .UseMvcWithDefaultRoute()
                 .UseSignalR(routes =>
                 {
                     routes.MapHub<ChatHub>("/chat");
-                });
+                })
+                .UseBotFramework()
+                .UseMvcWithDefaultRoute();
         }
     }
 }

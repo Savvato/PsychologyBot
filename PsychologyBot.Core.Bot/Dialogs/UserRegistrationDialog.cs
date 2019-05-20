@@ -16,6 +16,8 @@ using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.Core.Bot.Dialogs
 {
+    using Microsoft.AspNetCore.SignalR;
+
     using PsychologyBot.Network.Hubs;
 
     public class UserRegistrationDialog : ComponentDialog
@@ -30,12 +32,12 @@ namespace PsychologyBot.Core.Bot.Dialogs
 
         private readonly Faker userFaker;
         private readonly IUserBotRepository userRepository;
-        private readonly ChatHub chatHub;
+        private readonly IHubContext<ChatHub> chatHub;
 
         public UserRegistrationDialog(
             ConversationStateAccessors conversationStateAccessors,
-            IUserBotRepository userRepository, 
-            ChatHub chatHub)
+            IUserBotRepository userRepository,
+            IHubContext<ChatHub> chatHub)
             : base(DialogId)
         {
             this.conversationStateAccessors = conversationStateAccessors;
@@ -162,7 +164,7 @@ namespace PsychologyBot.Core.Bot.Dialogs
             };
 
             this.userRepository.AddUser(user);
-            await this.chatHub.UserAdded(user);
+            await this.chatHub.Clients.All.SendAsync(method: "userAdded", arg1: user, cancellationToken: cancellationToken);
 
             await stepContext.Context.SendActivityAsync(
                 "Регистрация завершена, теперь все ваши сообщения будут отправляться психологу",

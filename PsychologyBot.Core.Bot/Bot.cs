@@ -13,6 +13,9 @@ using PsychologyBot.Core.Interfaces;
 
 namespace PsychologyBot.Core.Bot
 {
+    using Microsoft.AspNetCore.SignalR;
+
+    using PsychologyBot.Core.Models;
     using PsychologyBot.Network.Hubs;
 
     public class Bot : IBot
@@ -21,13 +24,13 @@ namespace PsychologyBot.Core.Bot
 
         private readonly DialogSet dialogs;
         private readonly IUserBotRepository userRepository;
-        private readonly ChatHub chatHub;
+        private readonly IHubContext<ChatHub> chatHub;
 
         public Bot(
             IUserBotRepository userRepository,
             ConversationStateAccessors conversationStateAccessors,
             UserRegistrationDialog userRegistrationDialog,
-            ChatHub chatHub,
+            IHubContext<ChatHub> chatHub,
             ILogger<Bot> logger)
         {
             this.userRepository = userRepository;
@@ -80,9 +83,13 @@ namespace PsychologyBot.Core.Bot
             {
                 // There wasn't any active dialog
                 case DialogTurnStatus.Empty:
-                    await chatHub.SendMessageToPsychologyst(
-                        userId: turnContext.Activity.From.Id, 
-                        text: turnContext.Activity.Text);
+                    User user = this.userRepository.GetCurrentUser(turnContext);
+                    Message message = new Message(
+                        messageString: turnContext.Activity.Text,
+                        isUserMessage: true);
+                    user.Messages.Add(message);
+
+                    await this.chatHub.Clients.All.SendAsync(method: "chatUpdate", arg1: user.Id, arg2: message);
 
                     await turnContext.SendActivityAsync(
                         "Ваше сообщение отправлено психологу, пожалуйста, ожидайте ответа",

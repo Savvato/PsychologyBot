@@ -1,7 +1,13 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-4">
-      <app-users-list [users]="users"></app-users-list>
+      <ul class="users-list">
+        <li *ngFor="let user of signalR.users"
+          [class.selected]="user === selectedUser"
+          (click)="onSelect(user)">
+          <span class="badge">{{user.id}}</span> {{user.name}}
+        </li>
+      </ul>
     </div>
     <div class="col-md-8">
       <app-chat [user]="selectedUser"></app-chat>

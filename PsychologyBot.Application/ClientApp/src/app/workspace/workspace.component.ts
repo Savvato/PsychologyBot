@@ -1,18 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from './user';
+import { SignalRService } from '../signalr.service';
 
 @Component({
-  selector: 'app-workspace',
-  templateUrl: './workspace.component.html',
-  styleUrls: ['./workspace.component.css']
+    selector: 'app-workspace',
+    templateUrl: './workspace.component.html',
+    styleUrls: ['./workspace.component.css']
 })
 export class WorkspaceComponent implements OnInit {
-  users: User[];
-  selectedUser: User;
+    public selectedUser: User;
+    public users: User[];
 
-  constructor() { }
+    constructor(public signalR: SignalRService) { }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+        this.signalR.startConnection();
+    }
 
+    onSelect(user: User): void {
+        this.selectedUser = user;
+    }
 }
