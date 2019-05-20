@@ -265,3 +265,6 @@ __pycache__/
 
 # Compiled resources 
 PsychologyBot.Application/wwwroot
+
+# Application settings
+PsychologyBot.Application/appsettings.json
