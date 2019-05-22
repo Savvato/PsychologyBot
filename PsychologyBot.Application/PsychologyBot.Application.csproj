@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <CodeAnalysisRuleSet>EchoBotWithCounter.ruleset</CodeAnalysisRuleSet>
     <TypeScriptToolsVersion>3.4.3</TypeScriptToolsVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>

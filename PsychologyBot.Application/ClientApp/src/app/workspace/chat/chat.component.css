@@ -1,6 +1,10 @@
-.card-header { padding: 3px 10px 3px 3px; }
+.card-header {
+   padding: 3px 10px 3px 3px;
+}
 
-.card-body { padding: 7px; }
+.card-body {
+  padding: 7px 15px 7px 7px;
+}
 
 .chat { margin: 10px; }
 
@@ -10,5 +14,3 @@
   background-color: #e4ffd8;
   text-align: right;
 }
-
-.user-message .card-body { padding: 7px 15px 7px 7px; }
