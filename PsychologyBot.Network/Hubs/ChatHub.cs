@@ -48,16 +48,5 @@
 
             await this.Clients.All.SendAsync(method: "chatUpdate", arg1: userId, arg2: message);
         }
-
-        public async Task SendMessageToPsychologyst(string userId, string text)
-        {
-            User user = this.userRepository.GetUserById(userId);
-            Message message = new Message(
-                messageString: text,
-                isUserMessage: true);
-            user.Messages.Add(message);
-
-            await this.Clients.All.SendAsync(method: "chatUpdate", arg1: userId, arg2: message);
-        }
     }
 }

@@ -63,4 +63,9 @@ export class SignalRService {
         console.log('Invoking GetAllUsers');
         this.hubConnection.invoke('getAllUsers');
     }
+
+    public sendMessage(user: User, message: string) {
+        console.log(`Sending a message to ${user.id}`);
+        this.hubConnection.invoke('sendMessageToUser', user.id, message);
+    }
 }

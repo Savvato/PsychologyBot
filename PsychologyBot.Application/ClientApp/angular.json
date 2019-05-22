@@ -27,6 +27,8 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": [
+              "node_modules/popper.js/dist/popper.min.js",
+              "node_modules/jquery/jquery.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ],
             "es5BrowserSupport": true

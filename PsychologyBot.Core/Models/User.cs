@@ -19,10 +19,6 @@ namespace PsychologyBot.Core.Models
 
         public Gender Gender { get; set; }
 
-        public bool HasFamily { get; set; }
-
-        public bool HasConversationTroubles { get; set; }
-
         public ConversationReference ConversationReference { get; }
 
         public List<Message> Messages { get; }
