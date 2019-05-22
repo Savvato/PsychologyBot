@@ -5,5 +5,10 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- script: |
+    cd ./PsychologyBot.Application/ClientApp
+    npm install
+  displayName: 'npm install'
+
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
