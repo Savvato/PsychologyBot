@@ -16,6 +16,10 @@ using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.Core.Bot.Dialogs
 {
+    using Microsoft.AspNetCore.SignalR;
+
+    using PsychologyBot.Network.Hubs;
+
     public class UserRegistrationDialog : ComponentDialog
     {
         public const string DialogId = nameof(UserRegistrationDialog);
@@ -28,21 +32,26 @@ namespace PsychologyBot.Core.Bot.Dialogs
 
         private readonly Faker userFaker;
         private readonly IUserBotRepository userRepository;
+        private readonly IHubContext<ChatHub> chatHub;
 
         public UserRegistrationDialog(
             ConversationStateAccessors conversationStateAccessors,
-            IUserBotRepository userRepository)
+            IUserBotRepository userRepository,
+            IHubContext<ChatHub> chatHub)
             : base(DialogId)
         {
             this.conversationStateAccessors = conversationStateAccessors;
             this.userRepository = userRepository;
+            this.chatHub = chatHub;
 
             this.userFaker = new Faker();
 
             WaterfallStep[] steps =
             {
-                this.AskGender, this.ApplyGender, this.SuggestName, this.AskAboutFamily,
-                this.AskAboutConversationTroubles, this.Register
+                this.AskGender,
+                this.ApplyGender,
+                this.SuggestName,
+                this.Register
             };
 
             this.AddDialog(new WaterfallDialog(WaterfallDialogId, steps));
@@ -102,38 +111,6 @@ namespace PsychologyBot.Core.Bot.Dialogs
             return await stepContext.NextAsync(cancellationToken: cancellationToken);
         }
 
-        private async Task<DialogTurnResult> AskAboutFamily(WaterfallStepContext stepContext,
-            CancellationToken cancellationToken)
-        {
-            return await stepContext.PromptAsync(
-                ConfirmPromptId,
-                new PromptOptions
-                {
-                    Prompt = MessageFactory.Text("У вас есть семья?")
-                },
-                cancellationToken);
-        }
-
-        private async Task<DialogTurnResult> AskAboutConversationTroubles(WaterfallStepContext stepContext,
-            CancellationToken cancellationToken)
-        {
-            RegistrationState registrationState = await this.conversationStateAccessors
-                .RegistrationStateAccessor
-                .GetAsync(
-                    stepContext.Context,
-                    () => new RegistrationState(),
-                    cancellationToken);
-
-            registrationState.HasFamily = (bool) stepContext.Result;
-
-            return await stepContext.PromptAsync(
-                ConfirmPromptId,
-                new PromptOptions
-                {
-                    Prompt = MessageFactory.Text("У вас есть проблемы в общении?")
-                },
-                cancellationToken);
-        }
 
         private async Task<DialogTurnResult> Register(WaterfallStepContext stepContext,
             CancellationToken cancellationToken)
@@ -145,17 +122,15 @@ namespace PsychologyBot.Core.Bot.Dialogs
                     () => new RegistrationState(),
                     cancellationToken);
 
-            registrationState.HasConversationTroubles = (bool) stepContext.Result;
-
             User user = new User(stepContext.Context.Activity.From.Id,
                 stepContext.Context.Activity.GetConversationReference())
             {
                 Name = registrationState.Name,
                 Gender = registrationState.Gender,
-                HasFamily = registrationState.HasFamily,
-                HasConversationTroubles = registrationState.HasConversationTroubles
             };
+
             this.userRepository.AddUser(user);
+            await this.chatHub.Clients.All.SendAsync(method: "userAdded", arg1: user, cancellationToken: cancellationToken);
 
             await stepContext.Context.SendActivityAsync(
                 "Регистрация завершена, теперь все ваши сообщения будут отправляться психологу",

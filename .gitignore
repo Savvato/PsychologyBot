@@ -262,3 +262,9 @@ __pycache__/
 
 # Logs
 *.log
+
+# Compiled resources 
+PsychologyBot.Application/wwwroot
+
+# Application settings
+PsychologyBot.Application/appsettings.json

@@ -6,6 +6,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+
     using PsychologyBot.Core.Bot;
     using PsychologyBot.Core.Bot.Accessors;
     using PsychologyBot.Core.Bot.Dialogs;
@@ -26,8 +27,7 @@
             services.AddSingleton<UserRegistrationDialog>();
         }
 
-        public static void AddPsychologyBot(this IServiceCollection services, IConfiguration configuration,
-            ILoggerFactory loggerFactory)
+        public static void AddPsychologyBot(this IServiceCollection services, IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             ILogger<Startup> logger = loggerFactory.CreateLogger<Startup>();
 
@@ -54,9 +54,6 @@
                     await context.SendActivityAsync("Sorry, it looks like something went wrong.");
                     await context.SendActivityAsync($"EXCEPTION: {exception.Message}");
                 };
-
-                options.State.Add(conversationState);
-                options.State.Add(userState);
 
                 options.Middleware.Add(new ShowTypingMiddleware());
                 options.Middleware.Add(new AutoSaveStateMiddleware(userState, conversationState));

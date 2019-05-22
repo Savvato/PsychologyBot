@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,5 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PsychologyBot.Core\PsychologyBot.Core.csproj" />
+    <ProjectReference Include="..\PsychologyBot.Network\PsychologyBot.Network.csproj" />
   </ItemGroup>
 </Project>

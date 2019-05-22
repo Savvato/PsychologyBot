@@ -5,7 +5,9 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+
     using PsychologyBot.Application.Extensions;
+    using PsychologyBot.Network.Hubs;
 
     public class Startup
     {
@@ -21,6 +23,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSignalR();
             services.AddPsychologyBot(this.configuration, this.loggerFactory);
             services.AddRepositories();
             services.AddDialogs();
@@ -30,6 +33,10 @@
         {
             app.UseDefaultFiles()
                 .UseStaticFiles()
+                .UseSignalR(routes =>
+                {
+                    routes.MapHub<ChatHub>("/chat");
+                })
                 .UseBotFramework()
                 .UseMvcWithDefaultRoute();
         }

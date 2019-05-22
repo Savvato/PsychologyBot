@@ -15,7 +15,12 @@
         public static IWebHost BuildWebHost(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
-                .ConfigureLogging((hostingContext, logging) => { logging.AddAzureWebAppDiagnostics(); })
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddAzureWebAppDiagnostics();
+                    logging.AddConsole();
+                    logging.AddDebug();
+                })
                 .UseSerilog(
                     (hostingContext, loggerConfiguration) =>
                         loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration))

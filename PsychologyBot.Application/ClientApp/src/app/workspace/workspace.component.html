@@ -1,0 +1,17 @@
+<div class="container-fluid workspace">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="list-group users-list">
+        <li *ngFor="let user of signalR.users"
+          class="list-group-item list-group-item-action"
+          [class.selected]="user === selectedUser"
+          (click)="onSelect(user)">
+          {{user.name}}
+        </li>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <app-chat [user]="selectedUser"></app-chat>
+    </div>
+  </div>
+</div>
