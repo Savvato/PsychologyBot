@@ -42,10 +42,11 @@ export class SignalRService {
         this.hubConnection.on('chatUpdate', (userId: String, message: Message) => {
             console.log(`Got user id: ${userId}, message: ${message.messageString}`);
 
-            let user = this.users.find(user => user.channelId == userId);
+            let user = this.users.find(user => user.channelId === userId);
 
             if (user == null) {
                 console.log(`User ${userId} is not found`);
+                return;
             }
 
             user.messages.push(message);
