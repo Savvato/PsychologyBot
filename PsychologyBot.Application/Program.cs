@@ -18,6 +18,7 @@
                 .ConfigureLogging((hostingContext, logging) =>
                 {
                     logging.AddAzureWebAppDiagnostics();
+                    logging.AddFilter("Microsoft.AspNetCore", LogLevel.Information);
                     logging.AddConsole();
                     logging.AddDebug();
                 })

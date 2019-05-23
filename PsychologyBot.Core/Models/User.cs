@@ -4,23 +4,34 @@ using Microsoft.Bot.Schema;
 
 namespace PsychologyBot.Core.Models
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    using Newtonsoft.Json;
+
     public class User
     {
-        public User(string id, ConversationReference conversationReference)
-        {
-            this.Id = id;
-            this.ConversationReference = conversationReference;
-            this.Messages = new List<Message>();
-        }
+        private string _conversationReference;
 
-        public string Id { get; }
+        [Key, Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
+        [Required, Column(TypeName = "varchar(40)")]
+        public string ChannelId { get; set; }
+
+        [Required, Column(TypeName = "varchar(255)")]
         public string Name { get; set; }
 
+        [Required]
         public Gender Gender { get; set; }
 
-        public ConversationReference ConversationReference { get; }
+        [JsonIgnore, NotMapped]
+        public ConversationReference ConversationReference
+        {
+            get => JsonConvert.DeserializeObject<ConversationReference>(this._conversationReference);
+            set => this._conversationReference = JsonConvert.SerializeObject(value);
+        }
 
-        public List<Message> Messages { get; }
+        public List<Message> Messages { get; set; }
     }
 }

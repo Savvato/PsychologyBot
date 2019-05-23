@@ -4,12 +4,17 @@ using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.Core.Interfaces
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public interface IUserBotRepository
     {
-        User GetCurrentUser(ITurnContext turnContext);
+        Task<User> GetCurrentUser(ITurnContext turnContext, CancellationToken cancellationToken = default);
 
-        bool IsUserExists(ITurnContext turnContext);
+        Task<bool> IsUserExists(ITurnContext turnContext, CancellationToken cancellationToken = default);
 
-        void AddUser(User user);
+        Task SaveChanges(CancellationToken cancellationToken = default);
+
+        Task AddUser(User user, CancellationToken cancellationToken = default);
     }
 }
