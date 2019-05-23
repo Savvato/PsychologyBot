@@ -1,5 +1,6 @@
 ﻿namespace PsychologyBot.Network.Hubs
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -33,9 +34,12 @@
         public async Task SendMessageToUser(string userId, string text)
         {
             User user = this.userRepository.GetUserById(userId);
-            Message message = new Message(
-                messageString: text,
-                isUserMessage: false);
+            Message message = new Message
+            {
+                MessageString = text,
+                IsUserMessage = false,
+                Date = DateTime.Now
+            };
             user.Messages.Add(message);
 
             await this.adapter.ContinueConversationAsync(

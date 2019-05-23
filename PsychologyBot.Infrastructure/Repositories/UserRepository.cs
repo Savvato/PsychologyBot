@@ -19,12 +19,12 @@ namespace PsychologyBot.Infrastructure.Repositories
 
         public User GetCurrentUser(ITurnContext turnContext)
         {
-            return this.users.FirstOrDefault(user => user.Id == turnContext.Activity.From.Id);
+            return this.users.FirstOrDefault(user => user.ChannelId == turnContext.Activity.From.Id);
         }
 
         public bool IsUserExists(ITurnContext turnContext)
         {
-            return this.users.Exists(user => user.Id == turnContext.Activity.From.Id);
+            return this.users.Exists(user => user.ChannelId == turnContext.Activity.From.Id);
         }
 
         public void AddUser(User user)
@@ -39,7 +39,7 @@ namespace PsychologyBot.Infrastructure.Repositories
 
         public User GetUserById(string id)
         {
-            return this.users.FirstOrDefault(user => user.Id == id);
+            return this.users.FirstOrDefault(user => user.ChannelId == id);
         }
     }
 }

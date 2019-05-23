@@ -33,7 +33,7 @@ export class SignalRService {
 
     private addUsersListener() {
         this.hubConnection.on('userAdded', (user: User) => {
-            console.log(`Got user ID: ${user.id}`);
+            console.log(`Got user ID: ${user.channelId}`);
             this.users.push(user);
         });
     }
@@ -42,7 +42,7 @@ export class SignalRService {
         this.hubConnection.on('chatUpdate', (userId: String, message: Message) => {
             console.log(`Got user id: ${userId}, message: ${message.messageString}`);
 
-            let user = this.users.find(user => user.id == userId);
+            let user = this.users.find(user => user.channelId == userId);
 
             if (user == null) {
                 console.log(`User ${userId} is not found`);
@@ -65,7 +65,7 @@ export class SignalRService {
     }
 
     public sendMessage(user: User, message: string) {
-        console.log(`Sending a message to ${user.id}`);
-        this.hubConnection.invoke('sendMessageToUser', user.id, message);
+        console.log(`Sending a message to ${user.channelId}`);
+        this.hubConnection.invoke('sendMessageToUser', user.channelId, message);
     }
 }

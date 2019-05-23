@@ -122,11 +122,12 @@ namespace PsychologyBot.Core.Bot.Dialogs
                     () => new RegistrationState(),
                     cancellationToken);
 
-            User user = new User(stepContext.Context.Activity.From.Id,
-                stepContext.Context.Activity.GetConversationReference())
+            User user = new User
             {
+                ChannelId = stepContext.Context.Activity.From.Id,
                 Name = registrationState.Name,
                 Gender = registrationState.Gender,
+                ConversationReference = stepContext.Context.Activity.GetConversationReference()
             };
 
             this.userRepository.AddUser(user);
