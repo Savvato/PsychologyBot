@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.Bot.Builder;
 
@@ -8,38 +7,64 @@ using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.Infrastructure.Repositories
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using PsychologyBot.Infrastructure.Db;
+
     public class UserRepository : IUserBotRepository, IUserRepository
     {
-        private readonly List<User> users;
+        private readonly PsyDbContext dbContext;
 
-        public UserRepository()
+        public UserRepository(PsyDbContext dbContext)
         {
-            this.users = new List<User>();
+            this.dbContext = dbContext;
         }
 
-        public User GetCurrentUser(ITurnContext turnContext)
+        public Task<User> GetCurrentUser(ITurnContext turnContext, CancellationToken cancellationToken = default)
         {
-            return this.users.FirstOrDefault(user => user.ChannelId == turnContext.Activity.From.Id);
+            return this.dbContext
+                .Users
+                .Include(u => u.Messages)
+                .FirstOrDefaultAsync(
+                    user => user.ChannelId == turnContext.Activity.From.Id, 
+                    cancellationToken);
         }
 
-        public bool IsUserExists(ITurnContext turnContext)
+        public async Task<bool> IsUserExists(ITurnContext turnContext, CancellationToken cancellationToken = default)
         {
-            return this.users.Exists(user => user.ChannelId == turnContext.Activity.From.Id);
+            return await this.dbContext.Users.AnyAsync(user => user.ChannelId == turnContext.Activity.From.Id, cancellationToken);
         }
 
-        public void AddUser(User user)
+        public async Task AddUser(User user, CancellationToken cancellationToken = default)
         {
-            this.users.Add(user);
+            await this.dbContext.Users.AddAsync(user, cancellationToken);
+            await this.dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public List<User> GetAllUsers()
+        public async Task<List<User>> GetAllUsers(CancellationToken cancellationToken = default)
         {
-            return this.users;
+            return await this.dbContext
+                .Users
+                .Include(u => u.Messages)
+                .ToListAsync(cancellationToken);
         }
 
-        public User GetUserById(string id)
+        public async Task<User> GetUserById(string id, CancellationToken cancellationToken = default)
         {
-            return this.users.FirstOrDefault(user => user.ChannelId == id);
+            return await this.dbContext
+                .Users
+                .Include(u => u.Messages)
+                .FirstOrDefaultAsync(
+                    user => user.ChannelId == id, 
+                    cancellationToken);
+        }
+
+        public async Task SaveChanges(CancellationToken cancellationToken = default)
+        {
+            await this.dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

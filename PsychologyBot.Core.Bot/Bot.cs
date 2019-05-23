@@ -62,7 +62,7 @@ namespace PsychologyBot.Core.Bot
                         return;
                     }
 
-                    if (!this.userRepository.IsUserExists(turnContext))
+                    if (!await this.userRepository.IsUserExists(turnContext, cancellationToken))
                     {
                         await turnContext.SendActivityAsync(
                             "Пожалуйста, пройдите регистрацию, ответив на несколько вопросов",
@@ -85,7 +85,7 @@ namespace PsychologyBot.Core.Bot
             {
                 // There wasn't any active dialog
                 case DialogTurnStatus.Empty:
-                    User user = this.userRepository.GetCurrentUser(turnContext);
+                    User user = await this.userRepository.GetCurrentUser(turnContext, cancellationToken);
                     Message message = new Message
                     {
                         MessageString = turnContext.Activity.Text,
@@ -93,8 +93,9 @@ namespace PsychologyBot.Core.Bot
                         Date = DateTime.Now
                     };
                     user.Messages.Add(message);
+                    await this.userRepository.SaveChanges(cancellationToken);
 
-                    await this.chatHub.Clients.All.SendAsync(method: "chatUpdate", arg1: user.ChannelId, arg2: message);
+                    await this.chatHub.Clients.All.SendAsync(method: "chatUpdate", arg1: user.ChannelId, arg2: message, cancellationToken: cancellationToken);
 
                     await turnContext.SendActivityAsync(
                         "Ваше сообщение отправлено психологу, пожалуйста, ожидайте ответа",

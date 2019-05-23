@@ -4,10 +4,15 @@ using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.Core.Interfaces
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public interface IUserRepository
     {
-        List<User> GetAllUsers();
+        Task<List<User>> GetAllUsers(CancellationToken cancellationToken = default);
 
-        User GetUserById(string id);
+        Task<User> GetUserById(string id, CancellationToken cancellationToken = default);
+
+        Task SaveChanges(CancellationToken cancellationToken = default);
     }
 }

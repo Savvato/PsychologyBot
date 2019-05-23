@@ -130,7 +130,8 @@ namespace PsychologyBot.Core.Bot.Dialogs
                 ConversationReference = stepContext.Context.Activity.GetConversationReference()
             };
 
-            this.userRepository.AddUser(user);
+            await this.userRepository.AddUser(user, cancellationToken);
+
             await this.chatHub.Clients.All.SendAsync(method: "userAdded", arg1: user, cancellationToken: cancellationToken);
 
             await stepContext.Context.SendActivityAsync(

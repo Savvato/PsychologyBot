@@ -17,14 +17,16 @@
     {
         public static void AddRepositories(this IServiceCollection services)
         {
-            UserRepository userRepository = new UserRepository();
-            services.AddSingleton<IUserBotRepository>(userRepository);
-            services.AddSingleton<IUserRepository>(userRepository);
+            services.AddScoped<UserRepository>();
+            services.AddScoped<IUserBotRepository>(
+                serviceProvider => serviceProvider.GetRequiredService<UserRepository>());
+            services.AddScoped<IUserRepository>(
+                serviceProvider => serviceProvider.GetRequiredService<UserRepository>());
         }
 
         public static void AddDialogs(this IServiceCollection services)
         {
-            services.AddSingleton<UserRegistrationDialog>();
+            services.AddTransient<UserRegistrationDialog>();
         }
 
         public static void AddPsychologyBot(this IServiceCollection services, IConfiguration configuration, ILoggerFactory loggerFactory)

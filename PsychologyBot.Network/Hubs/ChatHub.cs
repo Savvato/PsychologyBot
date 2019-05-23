@@ -27,13 +27,13 @@
 
         public async Task GetAllUsers()
         {
-            List<User> users = this.userRepository.GetAllUsers();
+            List<User> users = await this.userRepository.GetAllUsers();
             await this.Clients.Caller.SendAsync(method: "allUsers", users);
         }
 
         public async Task SendMessageToUser(string userId, string text)
         {
-            User user = this.userRepository.GetUserById(userId);
+            User user = await this.userRepository.GetUserById(userId);
             Message message = new Message
             {
                 MessageString = text,
@@ -41,6 +41,7 @@
                 Date = DateTime.Now
             };
             user.Messages.Add(message);
+            await this.userRepository.SaveChanges();
 
             await this.adapter.ContinueConversationAsync(
                 botAppId: this.credentialProvider.AppId,
