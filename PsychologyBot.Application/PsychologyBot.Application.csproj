@@ -52,7 +52,8 @@
 
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="cd ClientApp&#xD;&#xA;ng build" />
+    <Exec WorkingDirectory="ClientApp\" Command="npm install" />
+    <Exec WorkingDirectory="ClientApp\" Command="ng build" />
   </Target>
 
 
