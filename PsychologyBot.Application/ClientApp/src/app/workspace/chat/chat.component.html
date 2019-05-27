@@ -1,24 +1,29 @@
 <div *ngIf="user">
-  <div class="chat">
-    <div class="card chat-message" [class.user-message]="message.isUserMessage" *ngFor="let message of user.messages">
-      <div class="card-header" style="text-align: right">
-        <small class="mb-2 text-muted">{{message.date | date:'medium'}}</small>
-      </div>
-      <div class="card-body">
-        {{message.messageString}}
+  <div class="card">
+    <div class="card-header violet-bg-color white-text-color">
+      Chat
+    </div>
+    <div id="chat" class="card-body scroll">
+      <div class="card chat-message" [ngClass]="message.isUserMessage ? 'user-message' : 'admin-message'" *ngFor="let message of user.messages">
+        <div class="message-card-header" style="text-align: right">
+          <small class="mb-2 text-muted">{{message.date | date:'medium'}}</small>
+        </div>
+        <div class="message-card-body">
+          {{message.messageString}}
+        </div>
       </div>
     </div>
+    <form class="form-padding" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="MessageField">Сообщение</label>
+        <textarea id="MessageField"
+                  name="MessageString"
+                  class="form-control"
+                  rows="3"
+                  [(ngModel)]="input"
+                  required></textarea>
+      </div>
+      <button class="btn violet-bg-color white-text-color" type="submit">Отправить</button>
+    </form>
   </div>
-  <form (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="MessageField">Сообщение</label>
-      <textarea id="MessageField"
-                name="MessageString"
-                class="form-control"
-                rows="3"
-                [(ngModel)]="input"
-                required></textarea>
-    </div>
-    <button class="btn btn-primary" type="submit">Отправить</button>
-  </form>
 </div>

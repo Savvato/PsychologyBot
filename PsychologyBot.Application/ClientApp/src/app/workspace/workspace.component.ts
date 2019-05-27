@@ -8,16 +8,19 @@ import { SignalRService } from '../signalr.service';
     styleUrls: ['./workspace.component.css']
 })
 export class WorkspaceComponent implements OnInit {
-    public selectedUser: User;
-    public users: User[];
+    selectedUser: User;
 
     constructor(public signalR: SignalRService) { }
 
     ngOnInit() {
-        this.signalR.startConnection();
+      this.signalR.startConnection();
     }
 
     onSelect(user: User): void {
-        this.selectedUser = user;
+      this.selectedUser = user;
+    }
+
+    showNotes(user: User): void {
+      
     }
 }

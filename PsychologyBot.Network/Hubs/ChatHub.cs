@@ -53,5 +53,18 @@
 
             await this.Clients.All.SendAsync(method: "chatUpdate", arg1: userId, arg2: message);
         }
+
+        public async Task ReadNewUserMessages(string userId)
+        {
+            User user = await this.userRepository.GetUserById(userId);
+            user.HasNewMessages = false;
+            await this.userRepository.SaveChanges();
+        }
+
+        public async Task AddNoteToUser(string userId, string note)
+        {
+            User user = await this.userRepository.GetUserById(userId);
+            await this.userRepository.SaveChanges();
+        }
     }
 }

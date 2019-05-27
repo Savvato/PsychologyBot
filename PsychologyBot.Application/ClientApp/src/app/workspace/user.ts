@@ -5,4 +5,6 @@ export class User {
     name: String;
     gender: String;
     messages: Message[];
+    hasNewMessages: Boolean;
+    notes: String[];
 }

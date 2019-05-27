@@ -1,3 +1,27 @@
 .workspace {
     margin-top: 10px;
 }
+
+.violet-bg-color {
+  background-color: #573d7f;
+}
+
+.white-text-color {
+  color: white;
+}
+
+.selected {
+  background-color: #f7e8ff;
+}
+
+.email-icon-style {
+  right: 10px;
+  position: absolute;
+  cursor: auto;
+}
+
+.notes-icon-style {
+  right: 50px;
+  position: absolute;
+  cursor: pointer;
+}

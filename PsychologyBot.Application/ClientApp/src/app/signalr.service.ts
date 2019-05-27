@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import * as SignalR from "@aspnet/signalr";
+import * as SignalR from '@aspnet/signalr';
 import { User } from './workspace/user';
 import { Message } from './workspace/message';
 
@@ -48,8 +48,11 @@ export class SignalRService {
                 console.log(`User ${userId} is not found`);
                 return;
             }
-
-            user.messages.push(message);
+          user.messages.push(message);
+          if (message.isUserMessage) {
+            user.hasNewMessages = true;
+          }
+          this.users.sort((a, b) => a.hasNewMessages === b.hasNewMessages ? 0 : a.hasNewMessages ? -1 : 1);
         });
     }
 
@@ -57,6 +60,7 @@ export class SignalRService {
         this.hubConnection.on('allUsers', (users: User[]) => {
             console.log(`Got ${users.length} users`);
             this.users = users;
+            this.users.sort((a, b) => a.hasNewMessages === b.hasNewMessages ? 0 : a.hasNewMessages ? -1 : 1);
         });
     }
 
@@ -68,5 +72,10 @@ export class SignalRService {
     public sendMessage(user: User, message: string) {
         console.log(`Sending a message to ${user.channelId}`);
         this.hubConnection.invoke('sendMessageToUser', user.channelId, message);
+    }
+
+    public readNewMessages(user: User) {
+      console.log(`Read new messages by ${user.channelId}`);
+      this.hubConnection.invoke('readNewUserMessages', user.channelId);
     }
 }

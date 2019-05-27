@@ -93,6 +93,7 @@ namespace PsychologyBot.Core.Bot
                         Date = DateTime.Now
                     };
                     user.Messages.Add(message);
+                    user.HasNewMessages = true;
                     await this.userRepository.SaveChanges(cancellationToken);
 
                     await this.chatHub.Clients.All.SendAsync(method: "chatUpdate", arg1: user.ChannelId, arg2: message, cancellationToken: cancellationToken);
