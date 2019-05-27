@@ -21,7 +21,7 @@ export class ChatComponent implements OnInit {
     if (this.user != null) {
       this.user.messages.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
       this.user.hasNewMessages = false;
-      this.signalR.readNewMessages(this.user);
+      this.signalR.markUserMessagesAsRead(this.user);
       this.scrollToBottom();
     }
   }
@@ -37,7 +37,7 @@ export class ChatComponent implements OnInit {
   onSubmit() {
     this.signalR.sendMessage(this.user, this.input);
     this.user.hasNewMessages = false;
-    this.signalR.readNewMessages(this.user);
+    this.signalR.markUserMessagesAsRead(this.user);
     this.input = "";
   }
 

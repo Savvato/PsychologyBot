@@ -14,14 +14,7 @@
   background-color: #f7e8ff;
 }
 
-.email-icon-style {
-  right: 10px;
-  position: absolute;
-  cursor: auto;
-}
-
-.notes-icon-style {
-  right: 50px;
-  position: absolute;
+.icon-style {
+  float: right;
   cursor: pointer;
 }

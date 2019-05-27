@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from './user';
 import { SignalRService } from '../signalr.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DetailsComponent } from './details/details.component';
 
 @Component({
     selector: 'app-workspace',
@@ -10,7 +12,7 @@ import { SignalRService } from '../signalr.service';
 export class WorkspaceComponent implements OnInit {
     selectedUser: User;
 
-    constructor(public signalR: SignalRService) { }
+  constructor(public signalR: SignalRService, private modalService: NgbModal) { }
 
     ngOnInit() {
       this.signalR.startConnection();
@@ -21,6 +23,7 @@ export class WorkspaceComponent implements OnInit {
     }
 
     showNotes(user: User): void {
-      
+      const detailsModal = this.modalService.open(DetailsComponent, { size: 'lg' });
+      detailsModal.componentInstance.user = user;
     }
 }

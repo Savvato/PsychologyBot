@@ -54,16 +54,30 @@
             await this.Clients.All.SendAsync(method: "chatUpdate", arg1: userId, arg2: message);
         }
 
-        public async Task ReadNewUserMessages(string userId)
+        public async Task MarkUserMessagesAsRead(string userId)
         {
             User user = await this.userRepository.GetUserById(userId);
             user.HasNewMessages = false;
             await this.userRepository.SaveChanges();
         }
 
-        public async Task AddNoteToUser(string userId, string note)
+        public async Task AddNoteToUser(string userId, string noteText)
         {
             User user = await this.userRepository.GetUserById(userId);
+            Note note = new Note
+            {
+                NoteString = noteText,
+                Date = DateTime.Now
+            };
+            user.Notes.Add(note);
+            await this.userRepository.SaveChanges();
+        }
+
+        public async Task RemoveNoteFromUser(string userId, int noteId)
+        {
+            User user = await this.userRepository.GetUserById(userId);
+            Note noteToRemove = user.Notes.Find(n => n.Id == noteId);
+            user.Notes.Remove(noteToRemove);
             await this.userRepository.SaveChanges();
         }
     }

@@ -1,3 +1,30 @@
-<p *ngIf="user">
-  details works!
-</p>
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">User notes</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <label>Notes</label>
+  <ul class="list-group">
+    <li class="list-group-item li-item" *ngFor="let note of user.notes">
+      <p>
+        {{note.noteString}}
+      </p>
+      <i class="material-icons icon-style" (click)="removeNote(note)">delete</i>
+    </li>
+  </ul>
+  <br />
+  <form>
+    <div class="form-group">
+      <label for="newNote">New note</label>
+      <div class="input-group">
+        <textarea id="newNote" class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn violet-bg-color white-text-color" (click)="addNote()">Add note</button>
+  <button type="button" class="btn btn-dark" (click)="activeModal.close()">Close</button>
+</div>

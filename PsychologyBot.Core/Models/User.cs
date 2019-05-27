@@ -4,7 +4,6 @@ using Microsoft.Bot.Schema;
 
 namespace PsychologyBot.Core.Models
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,6 +16,7 @@ namespace PsychologyBot.Core.Models
         public User()
         {
             this.Messages = new List<Message>();
+            this.Notes = new List<Note>();
         }
 
         [Key, Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -31,9 +31,6 @@ namespace PsychologyBot.Core.Models
         [Required, Column(TypeName = "boolean")]
         public bool HasNewMessages { get; set; }
 
-        [Column(TypeName = "text[]")]
-        public string[] Notes { get; set; }
-
         [Required]
         public Gender Gender { get; set; }
 
@@ -45,5 +42,7 @@ namespace PsychologyBot.Core.Models
         }
 
         public List<Message> Messages { get; set; }
+
+        public List<Note> Notes { get; set; }
     }
 }

@@ -11,8 +11,8 @@
               [class.selected]="user == selectedUser"
               (click)="onSelect(user)">
             {{user.name}}
-            <i class="material-icons email-icon-style" *ngIf="user.hasNewMessages">email</i>
-            <i class="material-icons notes-icon-style" (click)="showNotes(user)">notes</i>
+            <i class="material-icons icon-style" *ngIf="user.hasNewMessages">email</i>
+            <i class="material-icons icon-style" (click)="showNotes(user)">notes</i>
           </li>
         </ul>
       </div>

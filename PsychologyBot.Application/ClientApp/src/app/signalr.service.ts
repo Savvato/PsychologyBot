@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import * as SignalR from '@aspnet/signalr';
 import { User } from './workspace/user';
 import { Message } from './workspace/message';
+import { Note } from './workspace/note';
 
 @Injectable({
     providedIn: 'root'
@@ -74,8 +75,22 @@ export class SignalRService {
         this.hubConnection.invoke('sendMessageToUser', user.channelId, message);
     }
 
-    public readNewMessages(user: User) {
-      console.log(`Read new messages by ${user.channelId}`);
-      this.hubConnection.invoke('readNewUserMessages', user.channelId);
+    public markUserMessagesAsRead(user: User) {
+      console.log(`Marking user (${user.channelId}) messages as read`);
+      this.hubConnection.invoke('markUserMessagesAsRead', user.channelId);
+    }
+
+    public addNoteToUser(user: User, noteText: string) {
+      console.log(`Adding new note to ${user.channelId}`);
+      this.hubConnection.invoke('addNoteToUser', user.channelId, noteText);
+      var newNote = new Note();
+      newNote.noteString = noteText;
+      user.notes.push(newNote);
+    }
+
+    public removeNoteFromUser(user: User, note: Note) {
+      console.log(`Removing note (${note.id}) from ${user.channelId}`);
+      this.hubConnection.invoke('removeNoteFromUser', user.channelId, note.id);
+      user.notes.splice(user.notes.indexOf(note), 1);
     }
 }

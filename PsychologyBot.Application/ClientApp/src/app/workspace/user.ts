@@ -1,4 +1,5 @@
 import { Message } from './message';
+import { Note } from './note';
 
 export class User {
     channelId: String;
@@ -6,5 +7,5 @@ export class User {
     gender: String;
     messages: Message[];
     hasNewMessages: Boolean;
-    notes: String[];
+    notes: Note[];
 }
