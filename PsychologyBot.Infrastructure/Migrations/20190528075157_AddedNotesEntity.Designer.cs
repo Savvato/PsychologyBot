@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PsychologyBot.Core.Models;
@@ -10,9 +11,10 @@ using PsychologyBot.Infrastructure.Db;
 namespace PsychologyBot.Infrastructure.Migrations
 {
     [DbContext(typeof(PsyDbContext))]
-    partial class PsyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190528075157_AddedNotesEntity")]
+    partial class AddedNotesEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
