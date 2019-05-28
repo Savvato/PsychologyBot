@@ -1,3 +1,21 @@
 .workspace {
     margin-top: 10px;
 }
+
+.violet-bg-color {
+  background-color: #573d7f;
+}
+
+.white-text-color {
+  color: white;
+}
+
+.selected {
+  background-color: #f7e8ff;
+}
+
+.icon-style {
+  float: right;
+  cursor: pointer;
+  margin-right: 5px;
+}

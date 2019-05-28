@@ -1,13 +1,20 @@
 <div class="container-fluid workspace">
   <div class="row">
     <div class="col-md-4">
-      <div class="list-group users-list">
-        <li *ngFor="let user of signalR.users"
-          class="list-group-item list-group-item-action"
-          [class.selected]="user === selectedUser"
-          (click)="onSelect(user)">
-          {{user.name}}
-        </li>
+      <div class="card" *ngIf="signalR.users !== undefined && signalR.users.length > 0">
+        <div class="card-header violet-bg-color white-text-color">
+          Users
+        </div>
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let user of signalR.users"
+              class="list-group-item list-group-item-action"
+              [class.selected]="user == selectedUser"
+              (click)="onSelect(user)">
+            {{user.name}}
+            <i class="material-icons icon-style" *ngIf="user.hasNewMessages">email</i>
+            <i class="material-icons icon-style" (click)="showNotes(user)">notes</i>
+          </li>
+        </ul>
       </div>
     </div>
     <div class="col-md-8">

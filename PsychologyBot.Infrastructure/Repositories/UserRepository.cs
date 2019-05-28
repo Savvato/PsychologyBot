@@ -7,6 +7,7 @@ using PsychologyBot.Core.Models;
 
 namespace PsychologyBot.Infrastructure.Repositories
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -28,6 +29,7 @@ namespace PsychologyBot.Infrastructure.Repositories
             return this.dbContext
                 .Users
                 .Include(u => u.Messages)
+                .Include(u => u.Notes)
                 .FirstOrDefaultAsync(
                     user => user.ChannelId == turnContext.Activity.From.Id, 
                     cancellationToken);
@@ -49,6 +51,7 @@ namespace PsychologyBot.Infrastructure.Repositories
             return await this.dbContext
                 .Users
                 .Include(u => u.Messages)
+                .Include(u => u.Notes)
                 .ToListAsync(cancellationToken);
         }
 
@@ -57,6 +60,7 @@ namespace PsychologyBot.Infrastructure.Repositories
             return await this.dbContext
                 .Users
                 .Include(u => u.Messages)
+                .Include(u => u.Notes)
                 .FirstOrDefaultAsync(
                     user => user.ChannelId == id, 
                     cancellationToken);
@@ -64,7 +68,14 @@ namespace PsychologyBot.Infrastructure.Repositories
 
         public async Task SaveChanges(CancellationToken cancellationToken = default)
         {
-            await this.dbContext.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await this.dbContext.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

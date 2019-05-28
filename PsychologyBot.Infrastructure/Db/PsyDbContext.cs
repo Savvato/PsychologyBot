@@ -13,6 +13,8 @@
 
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<Note> Notes { get; set; }
+
         static PsyDbContext()
         {
             NpgsqlConnection.GlobalTypeMapper.MapEnum<Gender>();

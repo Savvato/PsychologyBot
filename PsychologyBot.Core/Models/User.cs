@@ -13,6 +13,12 @@ namespace PsychologyBot.Core.Models
     {
         private string _conversationReference;
 
+        public User()
+        {
+            this.Messages = new List<Message>();
+            this.Notes = new List<Note>();
+        }
+
         [Key, Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
@@ -21,6 +27,9 @@ namespace PsychologyBot.Core.Models
 
         [Required, Column(TypeName = "varchar(255)")]
         public string Name { get; set; }
+
+        [Required, Column(TypeName = "boolean")]
+        public bool HasNewMessages { get; set; }
 
         [Required]
         public Gender Gender { get; set; }
@@ -33,5 +42,7 @@ namespace PsychologyBot.Core.Models
         }
 
         public List<Message> Messages { get; set; }
+
+        public List<Note> Notes { get; set; }
     }
 }

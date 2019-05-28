@@ -1,7 +1,8 @@
 import { Injectable, OnInit } from '@angular/core';
-import * as SignalR from "@aspnet/signalr";
+import * as SignalR from '@aspnet/signalr';
 import { User } from './workspace/user';
 import { Message } from './workspace/message';
+import { Note } from './workspace/note';
 
 @Injectable({
     providedIn: 'root'
@@ -48,8 +49,11 @@ export class SignalRService {
                 console.log(`User ${userId} is not found`);
                 return;
             }
-
-            user.messages.push(message);
+          user.messages.push(message);
+          if (message.isUserMessage) {
+            user.hasNewMessages = true;
+          }
+          this.users.sort((a, b) => a.hasNewMessages === b.hasNewMessages ? 0 : a.hasNewMessages ? -1 : 1);
         });
     }
 
@@ -57,6 +61,7 @@ export class SignalRService {
         this.hubConnection.on('allUsers', (users: User[]) => {
             console.log(`Got ${users.length} users`);
             this.users = users;
+            this.users.sort((a, b) => a.hasNewMessages === b.hasNewMessages ? 0 : a.hasNewMessages ? -1 : 1);
         });
     }
 
@@ -68,5 +73,24 @@ export class SignalRService {
     public sendMessage(user: User, message: string) {
         console.log(`Sending a message to ${user.channelId}`);
         this.hubConnection.invoke('sendMessageToUser', user.channelId, message);
+    }
+
+    public markUserMessagesAsRead(user: User) {
+      console.log(`Marking user (${user.channelId}) messages as read`);
+      this.hubConnection.invoke('markUserMessagesAsRead', user.channelId);
+    }
+
+    public addNoteToUser(user: User, noteText: string) {
+      console.log(`Adding new note to ${user.channelId}`);
+      this.hubConnection.invoke('addNoteToUser', user.channelId, noteText);
+      var newNote = new Note();
+      newNote.noteString = noteText;
+      user.notes.push(newNote);
+    }
+
+    public removeNoteFromUser(user: User, note: Note) {
+      console.log(`Removing note (${note.id}) from ${user.channelId}`);
+      this.hubConnection.invoke('removeNoteFromUser', user.channelId, note.id);
+      user.notes.splice(user.notes.indexOf(note), 1);
     }
 }
