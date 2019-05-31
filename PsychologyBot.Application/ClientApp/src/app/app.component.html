@@ -1,2 +1,10 @@
 <app-navbar></app-navbar>
+<div *ngIf="userName">
+    <h2>Hi, {{userName}}!</h2>
+    <button (click)="logout()">Logout</button>
+  </div>
+  
+  <div *ngIf="!userName">
+    <button (click)="login()">Login</button>
+  </div>
 <app-workspace></app-workspace>
