@@ -24,9 +24,10 @@ export class AppComponent {
     this.authService.loadDiscoveryDocumentAndLogin();
 
     this.authService.events
-      .pipe(filter(e => e.type === 'token_received'))
       .subscribe(e => {
-        this.authService.loadUserProfile();
+        if (e.type === 'token_received') {
+          this.authService.loadUserProfile();
+        }
       });
   }
 
@@ -44,18 +45,7 @@ export class AppComponent {
     }
 
     let claims = this.authService.getIdentityClaims();
-
-    // User is not authenticated
-    if (!claims) {
-      return null;
-    }
-
-    // User profile have not been loaded yet or there isn't `name` claim
-    if (!claims['name']) {
-      this.authService.loadUserProfile();
-    }
-
-    this._userName = claims['name'];
+    this._userName = claims ? claims['name'] : null;
 
     return this._userName;
   }
