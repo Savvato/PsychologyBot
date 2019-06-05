@@ -21,7 +21,6 @@ export class AppComponent {
   constructor(private authService: OAuthService) {
     this.authService.configure(authConfig);
     this.authService.tokenValidationHandler = new JwksValidationHandler();
-    this.authService.loadDiscoveryDocumentAndLogin();
 
     this.authService.events
       .subscribe(e => {
@@ -29,14 +28,8 @@ export class AppComponent {
           this.authService.loadUserProfile();
         }
       });
-  }
 
-  public login() {
-    this.authService.initImplicitFlow();
-  }
-
-  public logout() {
-    this.authService.logOut();
+    this.authService.loadDiscoveryDocumentAndLogin();
   }
 
   public get userName(): string | null {

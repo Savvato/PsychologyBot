@@ -1,7 +1,13 @@
 <nav class="navbar navbar-expand-md navbar-dark violet-bg-color">
-  <a class="navbar-brand" href="">Psychology portal</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbar"></div>
+  <a class="navbar-brand" href="#">Psychology portal</a>
+  <div class="navbar-nav mr-auto"></div>
+
+  <span class="navbar-text" *ngIf="userName">
+    {{userName}}
+  </span>
+  <div class="navbar-nav px-3" *ngIf="userName">
+    <div class="nav-item text-nowrap">
+      <span class="nav-link" (click)="logout()">Sign out</span>
+    </div>
+  </div>
 </nav>
