@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Bot.Builder;
     using Microsoft.Bot.Builder.BotFramework;
@@ -12,6 +13,7 @@
     using PsychologyBot.Core.Interfaces;
     using PsychologyBot.Core.Models;
 
+    [Authorize]
     public class ChatHub : Hub
     {
         private readonly IUserRepository userRepository;
