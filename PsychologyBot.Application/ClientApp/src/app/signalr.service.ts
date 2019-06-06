@@ -5,11 +5,19 @@ import { Message } from './workspace/message';
 import { Note } from './workspace/note';
 import { OAuthService } from 'angular-oauth2-oidc';
 
+export enum ConnectionStatus {
+  Connected,
+  Disconnected,
+  Rejected
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class SignalRService {
   public users: User[];
+
+  public connectionStatus: ConnectionStatus = ConnectionStatus.Disconnected;
 
   private hubConnection: SignalR.HubConnection;
 
@@ -31,13 +39,22 @@ export class SignalRService {
     this.hubConnection
       .start()
       .then(() => {
+        this.connectionStatus = ConnectionStatus.Connected;
+
         console.log('Connection started');
+        
         this.addUsersListener();
         this.addUsersListListener();
         this.addChatListener();
         this.invokeUsersList();
+
+      }, (reason) => {
+        this.connectionStatus = ConnectionStatus.Rejected;
+        console.log('Connection has been rejected: ' + reason);
       })
-      .catch(error => console.log('Error while starting connection: ' + error));
+      .catch(error => {
+        console.log('Error while starting connection: ' + error);
+      });
   }
 
   private addUsersListener() {

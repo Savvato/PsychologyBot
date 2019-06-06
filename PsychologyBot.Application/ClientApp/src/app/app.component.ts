@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthConfig, OAuthService, JwksValidationHandler } from 'angular-oauth2-oidc';
-import { SignalRService } from './signalr.service';
+import { SignalRService, ConnectionStatus } from './signalr.service';
 
 export const authConfig: AuthConfig = {
   issuer: 'https://devidentity.akvelon.net:5003',
@@ -46,5 +46,9 @@ export class AppComponent {
     this._userName = claims ? claims['name'] : null;
 
     return this._userName;
+  }
+
+  public get isConnectionRejected(): boolean {
+    return this.signalR.connectionStatus == ConnectionStatus.Rejected;
   }
 }
