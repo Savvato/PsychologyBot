@@ -1,5 +1,10 @@
 ﻿namespace PsychologyBot.Application
 {
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -40,6 +45,9 @@
                     connectionString: this.configuration.GetConnectionString("DefaultConnection"),
                     optionsBuilder => optionsBuilder.MigrationsAssembly(assemblyName: typeof(PsyDbContext).Assembly.GetName().Name));
             });
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services
                 .AddAuthentication(options =>
                 {
@@ -52,7 +60,7 @@
                     options.RequireHttpsMetadata = this.hostingEnvironment.IsProduction();
                     options.Audience = this.configuration["Identity:Audience"];
                     options.Authority = this.configuration["Identity:Issuer"];
-
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
@@ -64,6 +72,23 @@
                         ValidateIssuerSigningKey = false,
                     };
                 });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    name: "OnlyPsychologists",
+                    policyBuilder =>
+                    {
+                        string[] userIds = this.configuration.GetSection("Identity:Psychologists")
+                            .GetChildren()
+                            .ToArray()
+                            .Select(c => c.Value)
+                            .ToArray();
+
+                        policyBuilder.RequireClaim(
+                            claimType: "sub",
+                            requiredValues: userIds);
+                    });
+            });
         }
 
         public void Configure(IApplicationBuilder app)

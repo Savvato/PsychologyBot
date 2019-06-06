@@ -13,7 +13,7 @@
     using PsychologyBot.Core.Interfaces;
     using PsychologyBot.Core.Models;
 
-    [Authorize]
+    [Authorize(policy: "OnlyPsychologists")]
     public class ChatHub : Hub
     {
         private readonly IUserRepository userRepository;
