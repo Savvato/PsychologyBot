@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthConfig, OAuthService, JwksValidationHandler } from 'angular-oauth2-oidc';
+import { SignalRService } from './signalr.service';
 
 export const authConfig: AuthConfig = {
   issuer: 'https://devidentity.akvelon.net:5003',
@@ -18,7 +19,7 @@ export const authConfig: AuthConfig = {
 export class AppComponent {
   private _userName: string;
 
-  constructor(private authService: OAuthService) {
+  constructor(public signalR: SignalRService, private authService: OAuthService) {
     this.authService.configure(authConfig);
     this.authService.tokenValidationHandler = new JwksValidationHandler();
 
@@ -26,10 +27,14 @@ export class AppComponent {
       .subscribe(e => {
         if (e.type === 'token_received') {
           this.authService.loadUserProfile();
+          this.signalR.startConnection();
         }
       });
 
-    this.authService.loadDiscoveryDocumentAndLogin();
+    this.authService.loadDiscoveryDocumentAndLogin()
+      .then(() => { 
+        this.signalR.startConnection(); 
+      });
   }
 
   public get userName(): string | null {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { User } from './user';
 import { SignalRService } from '../signalr.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -9,14 +9,10 @@ import { DetailsComponent } from './details/details.component';
     templateUrl: './workspace.component.html',
     styleUrls: ['./workspace.component.css']
 })
-export class WorkspaceComponent implements OnInit {
+export class WorkspaceComponent {
     selectedUser: User;
 
   constructor(public signalR: SignalRService, private modalService: NgbModal) { }
-
-    ngOnInit() {
-      this.signalR.startConnection();
-    }
 
     onSelect(user: User): void {
       this.selectedUser = user;

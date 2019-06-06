@@ -16,6 +16,10 @@ export class SignalRService {
   constructor(private authService: OAuthService) {}
 
   public startConnection() {
+    if (this.hubConnection && this.hubConnection.state == SignalR.HubConnectionState.Connected) {
+      return;
+    }
+    
     this.hubConnection = new SignalR.HubConnectionBuilder()
       .withUrl('/chat',
         {
