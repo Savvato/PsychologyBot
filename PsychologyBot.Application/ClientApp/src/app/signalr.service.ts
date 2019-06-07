@@ -1,96 +1,124 @@
 import { Injectable, OnInit } from '@angular/core';
 import * as SignalR from '@aspnet/signalr';
-import { User } from './workspace/user';
-import { Message } from './workspace/message';
-import { Note } from './workspace/note';
+import { User } from './models/user';
+import { Message } from './models/message';
+import { Note } from './models/note';
+import { OAuthService } from 'angular-oauth2-oidc';
+
+export enum ConnectionStatus {
+  Connected,
+  Disconnected,
+  Rejected
+}
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class SignalRService {
-    public users: User[];
+  public users: User[];
 
-    private hubConnection: SignalR.HubConnection;
+  public connectionStatus: ConnectionStatus = ConnectionStatus.Disconnected;
 
-    constructor() { }
+  private hubConnection: SignalR.HubConnection;
 
-    public startConnection() {
-        this.hubConnection = new SignalR.HubConnectionBuilder()
-            .withUrl('/chat')
-            .configureLogging(SignalR.LogLevel.Debug)
-            .build();
+  constructor(private authService: OAuthService) {}
 
-        this.hubConnection
-            .start()
-            .then(() => {
-                console.log('Connection started');
-                this.addUsersListener();
-                this.addUsersListListener();
-                this.addChatListener();
-                this.invokeUsersList();
-            })
-            .catch(error => console.log('Error while starting connection: ' + error));
+  public startConnection() {
+    if (this.hubConnection && this.hubConnection.state == SignalR.HubConnectionState.Connected) {
+      return;
     }
+    
+    this.hubConnection = new SignalR.HubConnectionBuilder()
+      .withUrl('/chat',
+        {
+           accessTokenFactory: () => this.authService.getIdToken()
+        })
+      .configureLogging(SignalR.LogLevel.Debug)
+      .build();
 
-    private addUsersListener() {
-        this.hubConnection.on('userAdded', (user: User) => {
-            console.log(`Got user ID: ${user.channelId}`);
-            this.users.push(user);
-        });
-    }
+    this.hubConnection
+      .start()
+      .then(() => {
+        this.connectionStatus = ConnectionStatus.Connected;
 
-    private addChatListener() {
-        this.hubConnection.on('chatUpdate', (userId: String, message: Message) => {
-            console.log(`Got user id: ${userId}, message: ${message.messageString}`);
+        console.log('Connection started');
+        
+        this.addUsersListener();
+        this.addUsersListListener();
+        this.addChatListener();
+        this.invokeUsersList();
 
-            let user = this.users.find(user => user.channelId === userId);
+      }, (reason) => {
+        this.connectionStatus = ConnectionStatus.Rejected;
+        console.log('Connection has been rejected: ' + reason);
+      })
+      .catch(error => {
+        console.log('Error while starting connection: ' + error);
+      });
+  }
 
-            if (user == null) {
-                console.log(`User ${userId} is not found`);
-                return;
-            }
-          user.messages.push(message);
-          if (message.isUserMessage) {
-            user.hasNewMessages = true;
-          }
-          this.users.sort((a, b) => a.hasNewMessages === b.hasNewMessages ? 0 : a.hasNewMessages ? -1 : 1);
-        });
-    }
+  private addUsersListener() {
+    this.hubConnection.on('userAdded',
+      (user: User) => {
+        console.log(`Got user ID: ${user.channelId}`);
+        this.users.push(user);
+      });
+  }
 
-    private addUsersListListener() {
-        this.hubConnection.on('allUsers', (users: User[]) => {
-            console.log(`Got ${users.length} users`);
-            this.users = users;
-            this.users.sort((a, b) => a.hasNewMessages === b.hasNewMessages ? 0 : a.hasNewMessages ? -1 : 1);
-        });
-    }
+  private addChatListener() {
+    this.hubConnection.on('chatUpdate',
+      (userId: String, message: Message) => {
+        console.log(`Got user id: ${userId}, message: ${message.messageString}`);
 
-    private invokeUsersList() {
-        console.log('Invoking GetAllUsers');
-        this.hubConnection.invoke('getAllUsers');
-    }
+        let user = this.users.find(user => user.channelId === userId);
 
-    public sendMessage(user: User, message: string) {
-        console.log(`Sending a message to ${user.channelId}`);
-        this.hubConnection.invoke('sendMessageToUser', user.channelId, message);
-    }
+        if (user == null) {
+          console.log(`User ${userId} is not found`);
+          return;
+        }
+        user.messages.push(message);
+        if (message.isUserMessage) {
+          user.hasNewMessages = true;
+        }
+        this.users.sort((a, b) => a.hasNewMessages === b.hasNewMessages ? 0 : a.hasNewMessages ? -1 : 1);
+      });
+  }
 
-    public markUserMessagesAsRead(user: User) {
-      console.log(`Marking user (${user.channelId}) messages as read`);
-      this.hubConnection.invoke('markUserMessagesAsRead', user.channelId);
-    }
+  private addUsersListListener() {
+    this.hubConnection.on('allUsers',
+      (users: User[]) => {
+        console.log(`Got ${users.length} users`);
+        this.users = users;
+        this.users.sort((a, b) => a.hasNewMessages === b.hasNewMessages ? 0 : a.hasNewMessages ? -1 : 1);
+      });
+  }
 
-    public addNoteToUser(user: User, noteText: string) {
-      console.log(`Adding new note to ${user.channelId}`);
-      this.hubConnection.invoke('addNoteToUser', user.channelId, noteText);
-      var newNote = new Note();
-      newNote.noteString = noteText;
-      user.notes.push(newNote);
-    }
+  private invokeUsersList() {
+    console.log('Invoking GetAllUsers');
+    this.hubConnection.invoke('getAllUsers');
+  }
 
-    public removeNoteFromUser(user: User, note: Note) {
-      console.log(`Removing note (${note.id}) from ${user.channelId}`);
-      this.hubConnection.invoke('removeNoteFromUser', user.channelId, note.id);
-      user.notes.splice(user.notes.indexOf(note), 1);
-    }
+  public sendMessage(user: User, message: string) {
+    console.log(`Sending a message to ${user.channelId}`);
+    this.hubConnection.invoke('sendMessageToUser', user.channelId, message);
+  }
+
+  public markUserMessagesAsRead(user: User) {
+    console.log(`Marking user (${user.channelId}) messages as read`);
+    this.hubConnection.invoke('markUserMessagesAsRead', user.channelId);
+  }
+
+  public addNoteToUser(user: User, noteText: string) {
+    console.log(`Adding new note to ${user.channelId}`);
+    this.hubConnection.invoke('addNoteToUser', user.channelId, noteText);
+    var newNote = new Note();
+    newNote.noteString = noteText;
+    user.notes.push(newNote);
+  }
+
+  public removeNoteFromUser(user: User, note: Note) {
+    console.log(`Removing note (${note.id}) from ${user.channelId}`);
+    this.hubConnection.invoke('removeNoteFromUser', user.channelId, note.id);
+    user.notes.splice(user.notes.indexOf(note), 1);
+  }
 }

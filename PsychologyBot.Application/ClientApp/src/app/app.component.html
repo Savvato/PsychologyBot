@@ -1,2 +1,8 @@
-<app-navbar></app-navbar>
-<app-workspace></app-workspace>
+<div class="d-flex justify-content-center" *ngIf="isConnectionRejected">
+    <h3>FORBIDDEN</h3>
+</div>
+<div *ngIf="!isConnectionRejected">
+    <app-navbar [userName]="userName"></app-navbar>
+    <app-workspace></app-workspace>
+</div>
+

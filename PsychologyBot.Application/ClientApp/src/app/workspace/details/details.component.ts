@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { User } from '../user';
-import { Note } from '../note';
+import { User } from '../../models/user';
+import { Note } from '../../models/note';
 import { SignalRService } from '../../signalr.service';
 
 @Component({

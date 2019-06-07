@@ -1,3 +1,7 @@
 .violet-bg-color {
     background-color: #462f69;
 }
+
+.nav-link {
+  cursor: pointer;
+}
