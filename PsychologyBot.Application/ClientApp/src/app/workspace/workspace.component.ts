@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { User } from './user';
+import { User } from '../models/user';
 import { SignalRService } from '../signalr.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DetailsComponent } from './details/details.component';

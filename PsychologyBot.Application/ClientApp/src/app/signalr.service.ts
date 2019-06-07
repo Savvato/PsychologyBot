@@ -1,8 +1,8 @@
 import { Injectable, OnInit } from '@angular/core';
 import * as SignalR from '@aspnet/signalr';
-import { User } from './workspace/user';
-import { Message } from './workspace/message';
-import { Note } from './workspace/note';
+import { User } from './models/user';
+import { Message } from './models/message';
+import { Note } from './models/note';
 import { OAuthService } from 'angular-oauth2-oidc';
 
 export enum ConnectionStatus {
