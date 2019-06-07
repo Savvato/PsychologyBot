@@ -1,15 +1,7 @@
 import { Component } from '@angular/core';
-import { AuthConfig, OAuthService, JwksValidationHandler } from 'angular-oauth2-oidc';
+import { OAuthService, JwksValidationHandler } from 'angular-oauth2-oidc';
 import { SignalRService, ConnectionStatus } from './signalr.service';
-
-export const authConfig: AuthConfig = {
-  issuer: 'https://devidentity.akvelon.net:5003',
-  clientId: '516ab147-4501-4976-b216-d6b41ba5ba8e',
-  redirectUri: 'http://localhost:3978',
-  postLogoutRedirectUri: 'http://localhost:3978',
-  scope: 'openid profile',
-  responseType: 'id_token token'
-}
+import { authConfig } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
