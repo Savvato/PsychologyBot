@@ -1,9 +1,5 @@
 ﻿namespace PsychologyBot.Application
 {
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Linq;
-
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Bot.Builder.Integration.AspNet.Core;
@@ -11,7 +7,6 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
-    using Microsoft.IdentityModel.Tokens;
 
     using PsychologyBot.Application.Extensions;
     using PsychologyBot.Infrastructure.Db;
@@ -37,56 +32,8 @@
             services.AddPsychologyBot(this.configuration, this.loggerFactory);
             services.AddRepositories();
             services.AddDialogs();
-            services.AddDbContext<PsyDbContext>(options =>
-            {
-                options.UseNpgsql(
-                    connectionString: this.configuration.GetConnectionString("DefaultConnection"),
-                    optionsBuilder => optionsBuilder.MigrationsAssembly(assemblyName: typeof(PsyDbContext).Assembly.GetName().Name));
-            });
-
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = this.hostingEnvironment.IsProduction();
-                    options.Audience = this.configuration["Identity:Audience"];
-                    options.Authority = this.configuration["Identity:Issuer"];
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = this.configuration["Identity:Issuer"],
-                        ValidateAudience = true,
-                        ValidAudience = this.configuration["Identity:Audience"],
-                        ValidateLifetime = true,
-
-                        ValidateIssuerSigningKey = false,
-                    };
-                });
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(
-                    name: "OnlyPsychologists",
-                    policyBuilder =>
-                    {
-                        string[] userIds = this.configuration.GetSection("Identity:Psychologists")
-                            .GetChildren()
-                            .ToArray()
-                            .Select(c => c.Value)
-                            .ToArray();
-
-                        policyBuilder.RequireClaim(
-                            claimType: "sub",
-                            requiredValues: userIds);
-                    });
-            });
+            services.AddDbStorage(this.configuration);
+            services.AddHubAuthentication(this.configuration, this.hostingEnvironment);
         }
 
         public void Configure(IApplicationBuilder app)
