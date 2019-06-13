@@ -1,21 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Bogus;
-using Bogus.DataSets;
-
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.Dialogs.Choices;
-
-using PsychologyBot.Core.Bot.Accessors;
-using PsychologyBot.Core.Bot.States;
-using PsychologyBot.Core.Interfaces;
-using PsychologyBot.Core.Models;
-
-namespace PsychologyBot.Core.Bot.Dialogs
+﻿namespace PsychologyBot.Core.Bot.Dialogs
 {
+    using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Bogus;
+    using Bogus.DataSets;
+
+    using Microsoft.Bot.Builder;
+    using Microsoft.Bot.Builder.Dialogs;
+    using Microsoft.Bot.Builder.Dialogs.Choices;
+
+    using PsychologyBot.Core.Bot.Accessors;
+    using PsychologyBot.Core.Bot.States;
+    using PsychologyBot.Core.Interfaces;
+    using PsychologyBot.Core.Models;
+
     using Microsoft.AspNetCore.SignalR;
 
     using PsychologyBot.Network.Hubs;
@@ -48,6 +48,7 @@ namespace PsychologyBot.Core.Bot.Dialogs
 
             WaterfallStep[] steps =
             {
+                this.AskForRegistration,
                 this.AskGender,
                 this.ApplyGender,
                 this.SuggestName,
@@ -59,6 +60,15 @@ namespace PsychologyBot.Core.Bot.Dialogs
             this.AddDialog(new ChoicePrompt(ChoicePromptId));
 
             this.AddDialog(new ConfirmPrompt(ConfirmPromptId));
+        }
+
+        private async Task<DialogTurnResult> AskForRegistration(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+            await stepContext.Context.SendActivityAsync(
+                "Пожалуйста, пройдите регистрацию",
+                cancellationToken: cancellationToken);
+
+            return await stepContext.NextAsync(cancellationToken: cancellationToken);
         }
 
         private async Task<DialogTurnResult> AskGender(WaterfallStepContext stepContext,

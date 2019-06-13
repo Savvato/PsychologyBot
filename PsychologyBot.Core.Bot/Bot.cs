@@ -64,10 +64,6 @@ namespace PsychologyBot.Core.Bot
 
                     if (!await this.userRepository.IsUserExists(turnContext, cancellationToken))
                     {
-                        await turnContext.SendActivityAsync(
-                            "Пожалуйста, пройдите регистрацию, ответив на несколько вопросов",
-                            cancellationToken: cancellationToken);
-
                         await dialogContext.BeginDialogAsync(UserRegistrationDialog.DialogId,
                             cancellationToken: cancellationToken);
                     }

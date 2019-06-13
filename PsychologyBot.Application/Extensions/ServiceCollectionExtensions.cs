@@ -76,7 +76,10 @@
             {
                 options.UseNpgsql(
                     connectionString: configuration.GetConnectionString("DefaultConnection"),
-                    optionsBuilder => optionsBuilder.MigrationsAssembly(assemblyName: typeof(PsyDbContext).Assembly.GetName().Name));
+                    optionsBuilder =>
+                    {
+                        optionsBuilder.MigrationsAssembly(assemblyName: typeof(PsyDbContext).Assembly.GetName().Name);
+                    });
             });
         }
 
